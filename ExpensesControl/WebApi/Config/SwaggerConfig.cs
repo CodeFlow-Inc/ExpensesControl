@@ -5,7 +5,7 @@ using System.Reflection;
 namespace ExpensesControl.WebApi.Config
 {
     /// <summary>
-    /// Static class responsible for configuring Swagger for the FoodServiceAPI.
+    /// Static class responsible for configuring Swagger for the ExpensesControlAPI.
     /// </summary>
     public static class SwaggerConfig
     {
@@ -19,16 +19,12 @@ namespace ExpensesControl.WebApi.Config
         {
             services.AddSwaggerGen(c =>
             {
-                // Define the Swagger document with basic API information
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FoodServiceAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ExpensesControlAPI", Version = "v1" });
 
-                // Enable Swagger annotations for better documentation and control
                 c.EnableAnnotations();
 
-                // Enable example filters for request and response examples
                 c.ExampleFilters();
 
-                // Add security definition for JWT Bearer tokens
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme",
@@ -36,7 +32,6 @@ namespace ExpensesControl.WebApi.Config
                     Scheme = "bearer"
                 });
 
-                // Require JWT Bearer token for accessing API endpoints
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -53,7 +48,6 @@ namespace ExpensesControl.WebApi.Config
                 });
             });
 
-            // Register request examples for Swagger documentation
             RegisterRequestExamples(services);
         }
 
@@ -63,10 +57,9 @@ namespace ExpensesControl.WebApi.Config
         /// <param name="services">The service collection to which the examples will be added.</param>
         private static void RegisterRequestExamples(IServiceCollection services)
         {
-            // Get all classes within the namespace "FoodServiceAPI.Controllers.SwaggerRequestExample"
             var exampleTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()
-                .Where(t => t.IsClass && t.Namespace == "FoodServiceAPI.Controllers.SwaggerRequestExample")
+                .Where(t => t.IsClass && t.Namespace == "ExpensesControlAPI.Controllers.SwaggerRequestExample")
                 .ToList();
 
             // Register each example class found in the specified namespace

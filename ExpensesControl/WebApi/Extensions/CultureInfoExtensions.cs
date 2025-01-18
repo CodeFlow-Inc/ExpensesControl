@@ -4,21 +4,24 @@ using System.Globalization;
 namespace ExpensesControl.WebApi.Extensions;
 
 /// <summary>
-/// Extensões para configurar informações de localização e cultura.
+/// Extensions for configuring localization and culture information.
 /// </summary>
 public static class CultureInfoExtensions
 {
-    const string defaultCulture = "pt-BR";
-    const string secundaryCulture = "en-US";
+    // Default culture
+    private const string defaultCulture = "pt-BR";
+
+    // Secondary culture
+    private const string secundaryCulture = "en-US";
 
     /// <summary>
-    /// Cria uma instância de <see cref="RequestLocalizationOptions"/> configurada para as culturas suportadas.
+    /// Creates an instance of <see cref="RequestLocalizationOptions"/> configured with the supported cultures.
     /// </summary>
     /// <remarks>
-    /// Define as culturas padrão e secundárias, bem como as configurações de fallback para culturas e culturas de interface do usuário.
+    /// Defines the default and secondary cultures, as well as fallback settings for cultures and UI cultures.
     /// </remarks>
     /// <returns>
-    /// Uma instância de <see cref="RequestLocalizationOptions"/> configurada com as culturas suportadas e a cultura padrão.
+    /// An instance of <see cref="RequestLocalizationOptions"/> configured with the supported cultures and the default culture.
     /// </returns>
     public static RequestLocalizationOptions CreateRequestLocalizationOptions()
     {

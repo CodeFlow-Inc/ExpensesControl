@@ -1,5 +1,5 @@
-﻿using Docker.DotNet.Models;
-using Docker.DotNet;
+﻿using Docker.DotNet;
+using Docker.DotNet.Models;
 using System.Diagnostics;
 
 namespace ExpensesControl.WebApi.Config.Manager

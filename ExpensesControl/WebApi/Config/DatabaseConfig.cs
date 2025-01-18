@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace ExpensesControl.WebApi.Config
+﻿namespace ExpensesControl.WebApi.Config
 {
     /// <summary>
     /// Class for configuring the database.

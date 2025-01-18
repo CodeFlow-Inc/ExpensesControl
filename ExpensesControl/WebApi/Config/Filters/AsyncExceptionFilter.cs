@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using ExpensesControl.Application.Errors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
-using ExpensesControl.Application.Errors;
 
 namespace ExpensesControl.WebApi.Config.Filters
 {

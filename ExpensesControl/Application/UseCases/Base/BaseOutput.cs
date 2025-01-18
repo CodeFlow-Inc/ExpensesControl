@@ -1,41 +1,41 @@
 ﻿namespace ExpensesControl.Application.UseCases.Base;
 
 /// <summary>
-/// Classe base para representar a saída de um caso de uso (Use Case).
+/// Base class to represent the output of a use case.
 /// </summary>
-/// <typeparam name="T">O tipo de dado contido no valor de saída.</typeparam>
+/// <typeparam name="T">The type of data contained in the output value.</typeparam>
 public abstract class BaseOutput<T>
 {
     /// <summary>
-    /// O valor da saída do caso de uso.
+    /// The output value of the use case.
     /// </summary>
     public T? Value { get; private set; } = default;
 
     /// <summary>
-    /// Identificador único do fluxo (FlowId) associado à requisição.
+    /// Unique flow identifier (FlowId) associated with the request.
     /// </summary>
     public Guid FlowId { get; private set; }
 
     /// <summary>
-    /// Lista de mensagens de erro associadas ao processamento do caso de uso.
+    /// List of error messages associated with processing the use case.
     /// </summary>
     private readonly List<string> _errorMessages = [];
 
     /// <summary>
-    /// Coleção somente leitura de mensagens de erro.
+    /// Read-only collection of error messages.
     /// </summary>
     public IReadOnlyCollection<string> ErrorMessages => _errorMessages.AsReadOnly();
 
     /// <summary>
-    /// Indica se a saída é válida, ou seja, se não há mensagens de erro.
+    /// Indicates if the output is valid, meaning there are no error messages.
     /// </summary>
     public bool IsValid => _errorMessages.Count == 0;
 
     /// <summary>
-    /// Define o resultado do caso de uso.
+    /// Sets the result of the use case.
     /// </summary>
-    /// <param name="value">O valor retornado pelo caso de uso.</param>
-    /// <param name="flowId">O identificador único do fluxo associado à operação.</param>
+    /// <param name="value">The value returned by the use case.</param>
+    /// <param name="flowId">The unique flow identifier associated with the operation.</param>
     public void SetResult(T value, Guid flowId)
     {
         Value = value;
@@ -43,27 +43,27 @@ public abstract class BaseOutput<T>
     }
 
     /// <summary>
-    /// Adiciona uma mensagem de erro à lista de mensagens de erro.
+    /// Adds an error message to the list of error messages.
     /// </summary>
-    /// <param name="errorMessage">A mensagem de erro a ser adicionada.</param>
+    /// <param name="errorMessage">The error message to be added.</param>
     public void AddErrorMessage(string errorMessage)
     {
         AddErrorMessages(errorMessage);
     }
 
     /// <summary>
-    /// Adiciona várias mensagens de erro à lista de mensagens de erro.
+    /// Adds multiple error messages to the list of error messages.
     /// </summary>
-    /// <param name="errorMessages">Uma coleção de mensagens de erro a serem adicionadas.</param>
+    /// <param name="errorMessages">A collection of error messages to be added.</param>
     public void AddErrorMessages(IEnumerable<string> errorMessages)
     {
         AddErrorMessages([.. errorMessages]);
     }
 
     /// <summary>
-    /// Adiciona múltiplas mensagens de erro à lista de mensagens de erro.
+    /// Adds multiple error messages to the list of error messages.
     /// </summary>
-    /// <param name="errorMessages">Uma lista de mensagens de erro.</param>
+    /// <param name="errorMessages">A list of error messages.</param>
     public void AddErrorMessages(params string[] errorMessages)
     {
         foreach (var errorMessage in errorMessages)

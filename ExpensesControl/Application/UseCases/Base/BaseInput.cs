@@ -3,24 +3,24 @@
 namespace ExpensesControl.Application.UseCases.Base;
 
 /// <summary>
-/// Classe base para entradas de uso de casos (Use Cases).
-/// Implementa a interface <see cref="IRequest{TResponse}"/> do MediatR.
+/// Base class for input in use cases.
+/// Implements the <see cref="IRequest{TResponse}"/> interface from MediatR.
 /// </summary>
-/// <typeparam name="TOutput">O tipo de saída esperado ao processar a requisição.</typeparam>
+/// <typeparam name="TOutput">The expected output type when processing the request.</typeparam>
 public abstract class BaseInput<TOutput> : IRequest<TOutput>
 {
     /// <summary>
-    /// Identificador único do fluxo (FlowId).
-    /// Utilizado para rastrear requisições em cenários distribuídos e facilitar a correlação de logs.
+    /// Unique identifier for the flow (FlowId).
+    /// Used to trace requests in distributed scenarios and facilitate log correlation.
     /// </summary>
     public required Guid FlowId { get; set; }
 
     /// <summary>
-    /// Define o identificador único do fluxo (FlowId) para a requisição.
-    /// Este identificador é geralmente utilizado para rastreamento em cenários distribuídos.
+    /// Sets the unique flow identifier (FlowId) for the request.
+    /// This identifier is generally used for tracking in distributed scenarios.
     /// </summary>
-    /// <param name="correlationId">O identificador único da requisição.</param>
-    /// <returns>O próprio objeto <see cref="BaseInput{TOutput}"/> com o FlowId definido.</returns>
+    /// <param name="correlationId">The unique identifier for the request.</param>
+    /// <returns>The same <see cref="BaseInput{TOutput}"/> object with the FlowId set.</returns>
     public BaseInput<TOutput> SetCorrelationId(Guid correlationId)
     {
         this.FlowId = correlationId;

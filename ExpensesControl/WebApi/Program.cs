@@ -1,14 +1,14 @@
-using System.Text.Json.Serialization;
-using Serilog;
 using Destructurama;
 using ExpensesControl.WebApi.Config;
 using ExpensesControl.WebApi.Config.Filters;
 using ExpensesControl.WebApi.Config.Manager;
 using ExpensesControl.WebApi.Extensions;
+using Serilog;
+using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // =====================================
-// Configuração de Logs com Serilog
+// Logging Configuration with Serilog
 // =====================================
 
 await SerilogSeqDockerManager.ValidateDockerContainer();
@@ -20,7 +20,7 @@ builder.Host.UseSerilog((context, configuration) =>
 Log.Information("Starting up");
 
 // =====================================
-// Configuração de Serviços
+// Services Configuration
 // =====================================
 
 builder.Services.AddHealthChecks();
@@ -38,10 +38,10 @@ builder.Services.AddControllers(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.ConfigureSwagger(); 
+builder.Services.ConfigureSwagger();
 
 // =====================================
-// Configuração do Pipeline de Middleware
+// Middleware Pipeline Configuration
 // =====================================
 
 var app = builder.Build();
