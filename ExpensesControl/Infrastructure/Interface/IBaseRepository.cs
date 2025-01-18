@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Interface
+﻿namespace ExpensesControl.Infrastructure.Interface
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {

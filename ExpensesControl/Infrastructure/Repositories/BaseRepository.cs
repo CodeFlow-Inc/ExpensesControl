@@ -1,8 +1,8 @@
-﻿using Infrastructure.Interface;
-using Infrastructure.Persistence;
+﻿using ExpensesControl.Infrastructure.Interface;
+using ExpensesControl.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace ExpensesControl.Infrastructure.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
