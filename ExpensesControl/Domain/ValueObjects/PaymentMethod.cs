@@ -1,6 +1,6 @@
 ﻿using ExpensesControl.Domain.Enums;
 
-namespace ExpensesControl.Domain.Entities;
+namespace ExpensesControl.Domain.ValueObjects;
 
 /// <summary>
 /// Represents a payment method for an expense.

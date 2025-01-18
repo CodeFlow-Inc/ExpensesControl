@@ -7,6 +7,7 @@ using ExpensesControl.WebApi.Extensions;
 using Serilog;
 using System.Text.Json.Serialization;
 using static ExpensesControl.Application.Extensions.EnumExtensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // =====================================

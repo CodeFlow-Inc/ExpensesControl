@@ -1,17 +1,13 @@
 ﻿using ExpensesControl.Domain.Enums;
+using ExpensesControl.Domain.ValueObjects;
 
 namespace ExpensesControl.Domain.Entities;
 
 /// <summary>
 /// Represents an expense entry.
 /// </summary>
-public class Expense
+public class Expense : BaseEntity<int>
 {
-    /// <summary>
-    /// Unique identifier for the expense.
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// User code associated with the expense.
     /// </summary>

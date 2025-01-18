@@ -1,4 +1,4 @@
-﻿namespace ExpensesControl.Domain.Entities;
+﻿namespace ExpensesControl.Domain.ValueObjects;
 
 /// <summary>
 /// Represents recurrence details for an expense.
