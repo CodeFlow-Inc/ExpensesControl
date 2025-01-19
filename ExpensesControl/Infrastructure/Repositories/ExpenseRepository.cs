@@ -1,8 +1,8 @@
 using ExpensesControl.Domain.Entities;
-using ExpensesControl.Infrastructure.Persistence;
+using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using Microsoft.Extensions.Logging;
 
-namespace ExpensesControl.Infrastructure.Repositories;
+namespace ExpensesControl.Infrastructure.SqlServer.Repositories;
 
 public class ExpenseRepository : BaseRepository<Expense, int>
 {

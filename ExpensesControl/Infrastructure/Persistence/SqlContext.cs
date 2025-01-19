@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpensesControl.Infrastructure.Persistence;
+namespace ExpensesControl.Infrastructure.SqlServer.Persistence;
 
 public class SqlContext(DbContextOptions<SqlContext> opts) : IdentityDbContext<IdentityUser, IdentityRole, string>(opts)
 {

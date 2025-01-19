@@ -1,4 +1,4 @@
-﻿namespace ExpensesControl.Infrastructure.Repositories.Interface;
+﻿namespace ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 
 /// <summary>
 /// Interface for specifications.

@@ -1,4 +1,4 @@
-﻿namespace ExpensesControl.Infrastructure.Repositories.Interface;
+﻿namespace ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 
 public interface IBaseRepository<T, TKey>
     where T : class

@@ -1,10 +1,10 @@
-﻿using ExpensesControl.Infrastructure.Persistence;
-using ExpensesControl.Infrastructure.Repositories.Interface;
+﻿using ExpensesControl.Infrastructure.SqlServer.Persistence;
+using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 
-namespace ExpensesControl.Infrastructure.Repositories
+namespace ExpensesControl.Infrastructure.SqlServer.Repositories
 {
     public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : class where TKey : struct
     {

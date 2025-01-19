@@ -1,5 +1,7 @@
-namespace ExpensesControl.Infrastructure.Repositories.Interface;
+using ExpensesControl.Domain.Entities;
 
-public interface IExpenseRepository : IBaseRepository<T, TKey>
+namespace ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
+
+public interface IExpenseRepository : IBaseRepository<Expense, int>
 {
 }
