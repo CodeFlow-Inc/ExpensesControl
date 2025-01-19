@@ -1,6 +1,4 @@
-﻿using ExpensesControl.Domain.Entities.Base;
-
-namespace ExpensesControl.Domain.Entities
+﻿namespace ExpensesControl.Domain.Entities.Base
 {
     /// <summary>
     /// Represents the base implementation of an entity with audit fields.

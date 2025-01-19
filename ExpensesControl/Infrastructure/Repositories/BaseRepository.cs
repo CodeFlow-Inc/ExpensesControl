@@ -8,8 +8,8 @@ namespace ExpensesControl.Infrastructure.Repositories
 {
     public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : class where TKey : struct
     {
-        private readonly SqlContext _context;
-        private readonly ILogger<BaseRepository<T, TKey>> _logger;
+        public readonly SqlContext _context;
+        public readonly ILogger<BaseRepository<T, TKey>> _logger;
 
         /// <summary>
         /// Initializes a new instance of the GenericRepository class.
@@ -122,6 +122,33 @@ namespace ExpensesControl.Infrastructure.Repositories
         {
             _logger.LogInformation("Listing all entities.");
             return _context.Set<T>().AsQueryable();
+        }
+
+        /// <summary>
+        /// Retrieves entities based on a specification.
+        /// </summary>
+        public virtual IQueryable<T> ListBySpecification(ISpecification<T> specification)
+        {
+            _logger.LogInformation("Retrieving entities based on a specification.");
+            return specification.Apply(_context.Set<T>().AsQueryable());
+        }
+
+        /// <summary>
+        /// Retrieves entities based on a specification asynchronously.
+        /// </summary>
+        public virtual async Task<List<T>> ListBySpecificationAsync(ISpecification<T> specification)
+        {
+            _logger.LogInformation("Retrieving entities asynchronously based on a specification.");
+            return await specification.Apply(_context.Set<T>().AsQueryable()).ToListAsync();
+        }
+
+        /// <summary>
+        /// Retrieves a single entity based on a specification.
+        /// </summary>
+        public virtual async Task<T?> GetSingleBySpecificationAsync(ISpecification<T> specification)
+        {
+            _logger.LogInformation("Retrieving a single entity asynchronously based on a specification.");
+            return await specification.Apply(_context.Set<T>().AsQueryable()).FirstOrDefaultAsync();
         }
     }
 }

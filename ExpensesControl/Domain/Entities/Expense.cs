@@ -1,4 +1,5 @@
-﻿using ExpensesControl.Domain.Enums;
+﻿using ExpensesControl.Domain.Entities.Base;
+using ExpensesControl.Domain.Enums;
 using ExpensesControl.Domain.ValueObjects;
 
 namespace ExpensesControl.Domain.Entities;
@@ -54,11 +55,6 @@ public class Expense : BaseEntity<int>
     /// Additional notes or details about the expense.
     /// </summary>
     public string? Notes { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public Status Status { get; set; }
 
     /// <summary>
     /// Validates the consistency of the expense data.
