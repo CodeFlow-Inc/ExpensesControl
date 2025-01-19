@@ -35,7 +35,7 @@ public class ExpenseConfiguration : BaseEntityConfiguration<Expense, int>
         // Value (required)
         builder.Property(e => e.Value)
             .IsRequired()
-            .HasColumnType("decimal(18,2)") // Defines precision for monetary values
+            .HasPrecision(18, 2) // Defines precision for monetary values
             .HasColumnName("value");
 
         // StartDate (required)
@@ -52,7 +52,6 @@ public class ExpenseConfiguration : BaseEntityConfiguration<Expense, int>
         // Category (required enum)
         builder.Property(e => e.Category)
             .IsRequired()
-            .HasConversion<string>() // Saves the enum as a string in the database
             .HasColumnName("category");
 
         // Notes (optional, max length)
@@ -76,6 +75,8 @@ public class ExpenseConfiguration : BaseEntityConfiguration<Expense, int>
                 .HasColumnName("installment_count");
 
             paymentMethod.Property(p => p.InstallmentValue)
+                .HasPrecision(18, 2) // Defines precision for monetary values
+                .IsRequired(false)
                 .HasColumnName("installment_value");
 
             paymentMethod.Property(p => p.Notes)
@@ -92,7 +93,6 @@ public class ExpenseConfiguration : BaseEntityConfiguration<Expense, int>
 
             recurring.Property(r => r.Periodicity)
                 .IsRequired()
-                .HasConversion<string>() // Saves the enum as a string in the database
                 .HasColumnName("recurrence_periodicity");
 
             recurring.Property(r => r.MaxOccurrences)
