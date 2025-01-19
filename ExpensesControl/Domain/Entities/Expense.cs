@@ -56,6 +56,11 @@ public class Expense : BaseEntity<int>
     public string? Notes { get; set; }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public Status Status { get; set; }
+
+    /// <summary>
     /// Validates the consistency of the expense data.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown when validation fails.</exception>
