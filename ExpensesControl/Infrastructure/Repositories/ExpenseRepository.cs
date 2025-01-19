@@ -5,14 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ExpensesControl.Infrastructure.SqlServer.Repositories;
 
-public class ExpenseRepository : BaseRepository<Expense, int>, IExpenseRepository
+/// <summary>
+/// Initializes a new instance of the ExpenseRepository class.
+/// </summary>
+/// <param name="context">The application database context.</param>
+/// <param name="logger">The logger instance.</param>
+public class ExpenseRepository(SqlContext context, ILogger<ExpenseRepository> logger) : BaseRepository<Expense, int>(context, logger), IExpenseRepository
 {
-    /// <summary>
-    /// Initializes a new instance of the ExpenseRepository class.
-    /// </summary>
-    /// <param name="context">The application database context.</param>
-    /// <param name="logger">The logger instance.</param>
-    protected ExpenseRepository(SqlContext context, ILogger<ExpenseRepository> logger) : base(context, logger)
-    {
-    }
 }
