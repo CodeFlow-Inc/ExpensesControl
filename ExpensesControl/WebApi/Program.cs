@@ -1,5 +1,6 @@
 using Destructurama;
 using ExpensesControl.Domain.Enums;
+using ExpensesControl.Infrastructure.SqlServer.Ioc;
 using ExpensesControl.WebApi.Config;
 using ExpensesControl.WebApi.Config.Filters;
 using ExpensesControl.WebApi.Config.Manager;
@@ -25,6 +26,11 @@ Log.Information("Starting up");
 // =====================================
 // Services Configuration
 // =====================================
+
+string? sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.ConfigureDatabaseSqlServer(sqlConnection!);
+builder.Services.UpdateMigrationDatabase();
+builder.Services.ConfigureRepositoryIoc();
 
 builder.Services.AddHealthChecks();
 

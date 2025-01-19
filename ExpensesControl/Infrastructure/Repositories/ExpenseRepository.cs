@@ -1,10 +1,11 @@
-using ExpensesControl.Domain.Entities;
+using ExpensesControl.Domain.Entities.AggregateRoot;
 using ExpensesControl.Infrastructure.SqlServer.Persistence;
+using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using Microsoft.Extensions.Logging;
 
 namespace ExpensesControl.Infrastructure.SqlServer.Repositories;
 
-public class ExpenseRepository : BaseRepository<Expense, int>
+public class ExpenseRepository : BaseRepository<Expense, int>, IExpenseRepository
 {
     /// <summary>
     /// Initializes a new instance of the ExpenseRepository class.

@@ -2,7 +2,7 @@
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ExpensesControl.Infrastructure.SqlServer.Config.Ioc
+namespace ExpensesControl.Infrastructure.SqlServer.Ioc
 {
     /// <summary>
     /// IoC configuration class for repository services.

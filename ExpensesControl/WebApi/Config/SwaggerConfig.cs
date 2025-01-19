@@ -48,7 +48,7 @@ namespace ExpensesControl.WebApi.Config
                 });
             });
 
-            RegisterRequestExamples(services);
+            //RegisterRequestExamples(services);
         }
 
         /// <summary>

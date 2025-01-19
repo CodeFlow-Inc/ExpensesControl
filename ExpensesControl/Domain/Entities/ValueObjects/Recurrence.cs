@@ -1,11 +1,11 @@
 ﻿using ExpensesControl.Domain.Enums;
 
-namespace ExpensesControl.Domain.ValueObjects;
+namespace ExpensesControl.Domain.Entities.ValueObjects;
 
 /// <summary>
 /// Represents recurrence details for an expense.
 /// </summary>
-public class Recurring
+public class Recurrence
 {
     /// <summary>
     /// Indicates whether the expense is recurring.

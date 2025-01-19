@@ -1,8 +1,8 @@
 ﻿using ExpensesControl.Domain.Entities.Base;
+using ExpensesControl.Domain.Entities.ValueObjects;
 using ExpensesControl.Domain.Enums;
-using ExpensesControl.Domain.ValueObjects;
 
-namespace ExpensesControl.Domain.Entities;
+namespace ExpensesControl.Domain.Entities.AggregateRoot;
 
 /// <summary>
 /// Represents an expense entry.
@@ -44,7 +44,7 @@ public class Expense : BaseEntity<int>
     /// <summary>
     /// Recurrence details for the expense.
     /// </summary>
-    public Recurring Recurrence { get; set; } = new Recurring();
+    public Recurrence Recurrence { get; set; } = new Recurrence();
 
     /// <summary>
     /// Payment method used for the expense.

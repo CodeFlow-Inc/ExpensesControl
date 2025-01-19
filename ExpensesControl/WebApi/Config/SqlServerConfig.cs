@@ -1,8 +1,7 @@
 ﻿using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace ExpensesControl.Infrastructure.SqlServer.Config
+namespace ExpensesControl.WebApi.Config
 {
     /// <summary>
     /// Class for configuring the database.

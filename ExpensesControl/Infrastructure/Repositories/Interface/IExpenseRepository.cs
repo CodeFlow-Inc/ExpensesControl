@@ -1,4 +1,4 @@
-using ExpensesControl.Domain.Entities;
+using ExpensesControl.Domain.Entities.AggregateRoot;
 
 namespace ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 

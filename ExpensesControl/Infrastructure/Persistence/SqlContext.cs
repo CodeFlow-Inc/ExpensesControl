@@ -1,16 +1,16 @@
-﻿using ExpensesControl.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ExpensesControl.Domain.Entities.AggregateRoot;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpensesControl.Infrastructure.SqlServer.Persistence;
 
-public class SqlContext(DbContextOptions<SqlContext> opts) : IdentityDbContext<IdentityUser, IdentityRole, string>(opts)
+public class SqlContext(DbContextOptions<SqlContext> opts) : DbContext(opts)
 {
     public DbSet<Expense> Expense { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SqlContext).Assembly);
     }
 }
