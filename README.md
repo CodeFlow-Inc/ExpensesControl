@@ -1,4 +1,4 @@
-### **Project: Personal Expense Management API**
+### **Project: Expense Control API**
 
 #### **Description**
 A simple and efficient REST API to manage personal expenses. The focus is on implementing small but well-optimized features, such as expense categorization, summary reports, and basic authentication. It aims to highlight best practices, including the use of design patterns, testing, and query optimization.
