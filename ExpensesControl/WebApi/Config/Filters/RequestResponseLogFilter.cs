@@ -2,18 +2,31 @@
 
 namespace ExpensesControl.WebApi.Config.Filters
 {
-    public class RequestResponseLogFilter : IAsyncActionFilter
+    /// <summary>
+    /// Filter to log HTTP request and response information.
+    /// </summary>
+    /// <param name="logger">Logger instance for writing log messages.</param>
+    /// <param name="config">Configuration instance to retrieve application settings.</param>
+    public class RequestResponseLogFilter(ILogger<RequestResponseLogFilter> logger, IConfiguration config) : IAsyncActionFilter
     {
-        private readonly ILogger<RequestResponseLogFilter> _logger;
-        private readonly bool _isRequestResponseLoggingEnabled;
-        public RequestResponseLogFilter(ILogger<RequestResponseLogFilter> logger, IConfiguration config)
-        {
-            _logger = logger;
-            _isRequestResponseLoggingEnabled = config.GetValue("EnableRequestResponseLogging", false);
-        }
+        /// <summary>
+        /// Indicates whether request and response logging is enabled.
+        /// </summary>
+        private readonly bool _isRequestResponseLoggingEnabled = config.GetValue("EnableRequestResponseLogging", false);
 
+        /// <summary>
+        /// Formats HTTP headers into a readable string.
+        /// </summary>
+        /// <param name="headers">The headers to format.</param>
+        /// <returns>A formatted string representation of the headers.</returns>
         private static string FormatHeaders(IHeaderDictionary headers) => string.Join(", ", headers.Select(kvp => $"{{{kvp.Key}: {string.Join(", ", kvp.Value!)}}}"));
 
+        /// <summary>
+        /// Asynchronously logs HTTP request and response information if logging is enabled.
+        /// </summary>
+        /// <param name="context">The context for the executing action.</param>
+        /// <param name="next">Delegate to execute the next action filter or action.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             // Filter is enabled only when the EnableRequestResponseLogging config value is set.
@@ -21,7 +34,7 @@ namespace ExpensesControl.WebApi.Config.Filters
             {
                 var requestBody = context.HttpContext.Request.Method == "GET" ? "" : context.ActionArguments.First().Value;
 
-                _logger.LogInformation("HTTP request information:\n" +
+                logger.LogDebug("HTTP request information:\n" +
                         "\tMethod: {@method}\n" +
                         "\tPath: {@path}\n" +
                         "\tQueryString: {@queryString}\n" +
@@ -40,7 +53,7 @@ namespace ExpensesControl.WebApi.Config.Filters
                 var responseContext = await next();
 
                 var result = responseContext.Result as Microsoft.AspNetCore.Mvc.ObjectResult;
-                _logger.LogInformation("HTTP response information:\n" +
+                logger.LogDebug("HTTP response information:\n" +
                         "\tStatusCode: {@statusCode}\n" +
                         "\tContentType: {@contentType}\n" +
                         "\tHeaders: {@headers}\n" +
