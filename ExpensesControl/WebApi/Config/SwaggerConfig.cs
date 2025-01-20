@@ -23,8 +23,6 @@ namespace ExpensesControl.WebApi.Config
 
                 c.EnableAnnotations();
 
-                c.ExampleFilters();
-
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme",
@@ -47,26 +45,6 @@ namespace ExpensesControl.WebApi.Config
                     }
                 });
             });
-
-            RegisterRequestExamples(services);
-        }
-
-        /// <summary>
-        /// Registers Swagger examples from classes within the specified namespace.
-        /// </summary>
-        /// <param name="services">The service collection to which the examples will be added.</param>
-        private static void RegisterRequestExamples(IServiceCollection services)
-        {
-            var exampleTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => t.IsClass && t.Namespace == "ExpensesControlAPI.Controllers.SwaggerRequestExample")
-                .ToList();
-
-            // Register each example class found in the specified namespace
-            foreach (var exampleType in exampleTypes)
-            {
-                services.AddSwaggerExamplesFromAssemblyOf(exampleType);
-            }
         }
     }
 }

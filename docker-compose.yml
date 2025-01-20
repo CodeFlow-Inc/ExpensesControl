@@ -1,0 +1,16 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: ExpensesControl.MSSQL
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Pass@dev123
+    ports:
+      - "1433:1433"
+    networks:
+      - sql-network
+    restart: always
+
+networks:
+  sql-network:
+    driver: bridge
