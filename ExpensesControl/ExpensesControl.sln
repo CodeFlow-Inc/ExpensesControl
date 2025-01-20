@@ -5,9 +5,16 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{7EC17069-58CE-4705-941F-F4F0C0511CC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{0D56F312-14A9-4884-A137-2F3EBB9B29A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{0D56F312-14A9-4884-A137-2F3EBB9B29A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{1F0BAAE4-DABE-48EC-B6C5-D09195FF1B73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{1F0BAAE4-DABE-48EC-B6C5-D09195FF1B73}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.SqlServer", "Infrastructure\Infrastructure.SqlServer.csproj", "{FC2A6955-8AF8-45A6-B02C-743316DF11BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{8EE0DF75-763C-4635-AC46-841DD9623934}"
+	ProjectSection(SolutionItems) = preProject
+		..\docker-compose.yml = ..\docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +34,10 @@ Global
 		{1F0BAAE4-DABE-48EC-B6C5-D09195FF1B73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F0BAAE4-DABE-48EC-B6C5-D09195FF1B73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F0BAAE4-DABE-48EC-B6C5-D09195FF1B73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC2A6955-8AF8-45A6-B02C-743316DF11BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC2A6955-8AF8-45A6-B02C-743316DF11BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC2A6955-8AF8-45A6-B02C-743316DF11BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC2A6955-8AF8-45A6-B02C-743316DF11BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
