@@ -3,7 +3,6 @@ using ExpensesControl.Domain.Enums;
 using ExpensesControl.Infrastructure.SqlServer.Ioc;
 using ExpensesControl.WebApi.Config;
 using ExpensesControl.WebApi.Config.Filters;
-using ExpensesControl.WebApi.Config.Manager;
 using ExpensesControl.WebApi.Extensions;
 using Serilog;
 using System.Text.Json.Serialization;
@@ -15,11 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Logging Configuration with Serilog
 // =====================================
 
-await SerilogSeqDockerManager.ValidateDockerContainer();
 builder.Host.UseSerilog((context, configuration) =>
     configuration
         .ReadFrom.Configuration(context.Configuration)
-        .Destructure.UsingAttributes()
+        .Destructure.UsingAttributes(x => x.IgnoreNullProperties = true)
 );
 Log.Information("Starting up");
 

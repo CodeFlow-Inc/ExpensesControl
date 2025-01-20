@@ -1,4 +1,15 @@
 services:
+  seq:
+    image: datalust/seq
+    container_name: serilog-seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:80"
+    networks:
+      - logging-network
+    restart: always
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: ExpensesControl.MSSQL
@@ -12,5 +23,7 @@ services:
     restart: always
 
 networks:
+  logging-network:
+    driver: bridge
   sql-network:
     driver: bridge

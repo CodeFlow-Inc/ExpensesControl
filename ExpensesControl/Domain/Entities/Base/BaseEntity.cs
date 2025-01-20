@@ -1,4 +1,6 @@
-﻿namespace ExpensesControl.Domain.Entities.Base
+﻿using Destructurama.Attributed;
+
+namespace ExpensesControl.Domain.Entities.Base
 {
     /// <summary>
     /// Represents the base implementation of an entity with audit fields.
@@ -13,21 +15,25 @@
         /// <summary>
         /// Gets the date and time when the entity was created.
         /// </summary>
+        [NotLogged]
         public DateTime CreationDate { get; protected set; }
 
         /// <summary>
         /// Gets the username of the user who created the entity.
         /// </summary>
+        [NotLogged]
         public string CreatedByUser { get; protected set; }
 
         /// <summary>
         /// Gets the date and time when the entity was last updated.
         /// </summary>
+        [NotLogged]
         public DateTime LastUpdateDate { get; protected set; }
 
         /// <summary>
         /// Gets the username of the user who last updated the entity.
         /// </summary>
+        [NotLogged]
         public string UpdatedByUser { get; protected set; }
 
         /// <summary>

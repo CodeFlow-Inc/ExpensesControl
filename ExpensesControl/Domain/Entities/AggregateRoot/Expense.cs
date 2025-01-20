@@ -1,4 +1,5 @@
-﻿using ExpensesControl.Domain.Entities.Base;
+﻿using Destructurama.Attributed;
+using ExpensesControl.Domain.Entities.Base;
 using ExpensesControl.Domain.Entities.ValueObjects;
 using ExpensesControl.Domain.Enums;
 
@@ -12,6 +13,7 @@ public class Expense : BaseEntity<int>
     /// <summary>
     /// User code associated with the expense.
     /// </summary>
+    [LogMasked]
     public int UserCode { get; set; }
 
     /// <summary>
