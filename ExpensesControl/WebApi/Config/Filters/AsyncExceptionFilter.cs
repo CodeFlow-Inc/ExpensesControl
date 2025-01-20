@@ -6,37 +6,28 @@ using Newtonsoft.Json;
 namespace ExpensesControl.WebApi.Config.Filters
 {
     /// <summary>
-    /// A global exception filter that will handle all unhandled exceptions for the application.
+    /// A global exception filter that handles all unhandled exceptions for the application.
     /// </summary>
-    internal class AsyncExceptionFilter : IAsyncExceptionFilter
+    /// <remarks>
+    /// This filter ensures consistent logging and error responses for both unhandled and service-specific exceptions.
+    /// </remarks>
+    /// <param name="logger">Logger instance for logging error details.</param>
+    /// <param name="hostEnvironment">Host environment for determining the current environment context.</param>
+    internal class AsyncExceptionFilter(ILogger<AsyncExceptionFilter> logger, IHostEnvironment hostEnvironment) : IAsyncExceptionFilter
     {
-        private readonly ILogger<AsyncExceptionFilter> _logger;
-        private readonly IHostEnvironment _hostEnvironment;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="AsyncExceptionFilter"/> class.
+        /// Handles exceptions asynchronously, logs the error, and returns a standardized error response.
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="hostEnvironment"></param>
-        public AsyncExceptionFilter(ILogger<AsyncExceptionFilter> logger, IHostEnvironment hostEnvironment)
-        {
-            _logger = logger;
-            _hostEnvironment = hostEnvironment;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context">The exception context containing details of the current HTTP request and exception.</param>
+        /// <returns>A completed task once the exception handling is done.</returns>
         public Task OnExceptionAsync(ExceptionContext context)
         {
             var exception = context.Exception;
             var referenceId = Guid.NewGuid().ToString();
 
-            _logger.LogError(exception, "UnhandledException: {ExceptionType} - {Message}. {Log}", exception.GetType(), exception.Message, $"ReferenceId: {referenceId}");
+            logger.LogError(exception, "UnhandledException: {ExceptionType} - {Message}. {Log}", exception.GetType(), exception.Message, $"ReferenceId: {referenceId}");
 
-            var content = $"An unexpected error has occurred. You can use the following reference id to help us diagnose your problem: {referenceId}";
+            var content = $"An unexpected error has occurred. You can use the following reference ID to help us diagnose your problem: {referenceId}";
 
             context.Result = new ContentResult
             {
@@ -50,30 +41,33 @@ namespace ExpensesControl.WebApi.Config.Filters
             return Task.CompletedTask;
         }
 
-
         /// <summary>
-        /// Ensures a string ends in a period.
+        /// Ensures that a given string ends with a period.
         /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
+        /// <param name="s">The input string.</param>
+        /// <returns>The string with a period appended if not already present.</returns>
         private static string EnsureStringEndsInPeriod(string s)
         {
-            return $"{s.TrimEnd('.')}.";
+            return $"{s.TrimEnd('.')}."; // Ensure proper punctuation
         }
 
         /// <summary>
-        /// Escapes braces for string formatting.
+        /// Escapes braces in a string for safe use in string formatting.
         /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
+        /// <param name="s">The input string to escape.</param>
+        /// <returns>The escaped string with braces doubled.</returns>
         private static string EscapeJsonForStringFormatInput(string s)
         {
             return s.Replace("{", "{{").Replace("}", "}}");
         }
 
-        private IActionResult GetResult(Exception exception)
+        /// <summary>
+        /// Generates a standardized result for generic exceptions.
+        /// </summary>
+        /// <param name="exception">The exception to process.</param>
+        /// <returns>An <see cref="IActionResult"/> with a standardized error message.</returns>
+        private ContentResult GetResult(Exception exception)
         {
-            // This will generate: "{ExceptionType} - {Message}." or "{ExceptionType}." if no message is present.
             var exceptionDescription = exception.GetType().ToString();
 
             if (!string.IsNullOrEmpty(exception.Message))
@@ -89,9 +83,9 @@ namespace ExpensesControl.WebApi.Config.Filters
                 ErrorLogId = Guid.NewGuid().ToString()
             };
 
-            _logger.LogError(exception, "UnhandledException: {ExceptionDescription} {{{Log}}}", exceptionDescription, log);
+            logger.LogError(exception, "UnhandledException: {ExceptionDescription} {{{Log}}}", exceptionDescription, log);
 
-            var content = $"An unexpected error has occurred. You can use the following reference id to help us diagnose your problem: {log.ErrorLogId}";
+            var content = $"An unexpected error has occurred. You can use the following reference ID to help us diagnose your problem: {log.ErrorLogId}";
 
             return new ContentResult
             {
@@ -101,7 +95,12 @@ namespace ExpensesControl.WebApi.Config.Filters
             };
         }
 
-        private IActionResult GetResult(ServiceException exception)
+        /// <summary>
+        /// Generates a standardized result for service-specific exceptions.
+        /// </summary>
+        /// <param name="exception">The service exception to process.</param>
+        /// <returns>An <see cref="IActionResult"/> with detailed error information.</returns>
+        private ObjectResult GetResult(ServiceException exception)
         {
             var responseBody = new ProblemDetails
             {
@@ -110,7 +109,7 @@ namespace ExpensesControl.WebApi.Config.Filters
                 Detail = exception.Detail
             };
 
-            if (_hostEnvironment.IsDevelopment())
+            if (hostEnvironment.IsDevelopment())
             {
                 responseBody.Extensions.Add("stackTrace", exception.ToString());
             }
@@ -125,7 +124,7 @@ namespace ExpensesControl.WebApi.Config.Filters
             exceptionDescription = EnsureStringEndsInPeriod(exceptionDescription);
             exceptionDescription = EscapeJsonForStringFormatInput(exceptionDescription);
 
-            _logger.LogInformation(exception, "ServiceException: {ExceptionDescription} {{{Log}}}", exceptionDescription, log);
+            logger.LogInformation(exception, "ServiceException: {ExceptionDescription} {{{Log}}}", exceptionDescription, log);
 
             responseBody.Status = exception.ErrorCode switch
             {
@@ -145,20 +144,29 @@ namespace ExpensesControl.WebApi.Config.Filters
         }
 
         /// <summary>
-        /// Additional details for an Error Log.
+        /// Represents additional details for a generic error log.
         /// </summary>
         private sealed class ErrorLog
         {
+            /// <summary>
+            /// The unique identifier for the error log.
+            /// </summary>
             public string ErrorLogId { get; init; } = default!;
 
+            /// <summary>
+            /// The unique identifier for the audit log.
+            /// </summary>
             public string AuditLogId { get; set; } = default!;
 
+            /// <summary>
+            /// The unique identifier for the request log.
+            /// </summary>
             public string RequestId { get; set; } = default!;
 
             /// <summary>
-            /// Returns ReferenceId: <see cref="ErrorLogId"/>.
+            /// Returns a string representation of the error log, including the reference ID.
             /// </summary>
-            /// <returns></returns>
+            /// <returns>A string containing the reference ID.</returns>
             public override string ToString()
             {
                 return $"ReferenceId: {ErrorLogId}";
@@ -166,18 +174,24 @@ namespace ExpensesControl.WebApi.Config.Filters
         }
 
         /// <summary>
-        /// Additional details for an Service Exception Log.
+        /// Represents additional details for a service exception log.
         /// </summary>
         private sealed class ServiceExceptionLog
         {
+            /// <summary>
+            /// The unique identifier for the service exception log.
+            /// </summary>
             public string ServiceExceptionLogId { get; init; } = default!;
 
+            /// <summary>
+            /// The unique identifier for the audit log.
+            /// </summary>
             public string AuditLogId { get; set; } = default!;
 
             /// <summary>
-            /// Returns ReferenceId: <see cref="ServiceExceptionLogId"/>.
+            /// Returns a string representation of the service exception log, including the reference ID.
             /// </summary>
-            /// <returns></returns>
+            /// <returns>A string containing the reference ID.</returns>
             public override string ToString()
             {
                 return $"ReferenceId: {ServiceExceptionLogId}";
