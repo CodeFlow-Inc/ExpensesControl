@@ -16,6 +16,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Ioc
         public static void ConfigureRepositoryIoc(this IServiceCollection services)
         {
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            services.AddScoped<IIncomeRepository, IncomeRepositoryy>();
         }
     }
 }
