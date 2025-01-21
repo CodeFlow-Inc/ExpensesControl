@@ -4,18 +4,8 @@
 /// Base class to represent the output of a use case.
 /// </summary>
 /// <typeparam name="T">The type of data contained in the output value.</typeparam>
-public abstract class BaseOutput<T>
+public abstract class BaseOutput
 {
-    /// <summary>
-    /// The output value of the use case.
-    /// </summary>
-    public T? Value { get; private set; } = default;
-
-    /// <summary>
-    /// Unique flow identifier (FlowId) associated with the request.
-    /// </summary>
-    public Guid FlowId { get; private set; }
-
     /// <summary>
     /// List of error messages associated with processing the use case.
     /// </summary>
@@ -31,16 +21,6 @@ public abstract class BaseOutput<T>
     /// </summary>
     public bool IsValid => _errorMessages.Count == 0;
 
-    /// <summary>
-    /// Sets the result of the use case.
-    /// </summary>
-    /// <param name="value">The value returned by the use case.</param>
-    /// <param name="flowId">The unique flow identifier associated with the operation.</param>
-    public void SetResult(T value, Guid flowId)
-    {
-        Value = value;
-        FlowId = flowId;
-    }
 
     /// <summary>
     /// Adds an error message to the list of error messages.

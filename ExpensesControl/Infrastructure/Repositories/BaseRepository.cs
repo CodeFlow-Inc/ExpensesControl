@@ -42,12 +42,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Repositories
             _logger.LogInformation("Updating an entity.");
 
             // Check if the entity exists in the database
-            var existingEntity = await _context.Set<T>().FindAsync(id);
-            if (existingEntity == null)
-            {
-                throw new KeyNotFoundException("Entity not found");
-            }
-
+            var existingEntity = await _context.Set<T>().FindAsync(id) ?? throw new KeyNotFoundException("Entidade não encontrada.");
             _context.Entry(existingEntity).CurrentValues.SetValues(entity);
             int result = await _context.SaveChangesAsync();
 
@@ -63,7 +58,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Repositories
             _logger.LogInformation("Deleting an entity.");
 
             // Check if the entity exists in the database
-            var existingEntity = await _context.Set<T>().FindAsync(id) ?? throw new KeyNotFoundException("Entity not found");
+            var existingEntity = await _context.Set<T>().FindAsync(id) ?? throw new KeyNotFoundException("Entidade não encontrada.");
             EntityEntry<T>? entry = _context.Entry(existingEntity);
             entry.State = EntityState.Deleted;
             await _context.SaveChangesAsync();
@@ -82,7 +77,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Repositories
             if (entity == null)
             {
                 _logger.LogWarning("Entity not found for ID: {Id}.", id);
-                throw new KeyNotFoundException($"Entity not found for ID: {id}");
+                throw new KeyNotFoundException($"Entidade não encontrada para o ID: {id}");
             }
             else
             {
@@ -109,7 +104,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Repositories
             }
 
             T entity = await query.FirstOrDefaultAsync(e => EF.Property<TKey>(e, "Id").Equals(id))
-                        ?? throw new KeyNotFoundException($"Entity not found for ID: {id}");
+                        ?? throw new KeyNotFoundException($"Entidade não encontrada para o ID: {id}");
 
             _logger.LogInformation("Entity retrieved successfully for ID: {Id}.", id);
             return entity;

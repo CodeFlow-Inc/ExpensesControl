@@ -2,6 +2,7 @@
 using ExpensesControl.Domain.Entities.Base;
 using ExpensesControl.Domain.Entities.ValueObjects;
 using ExpensesControl.Domain.Enums;
+using System.Collections.Generic;
 
 namespace ExpensesControl.Domain.Entities.AggregateRoot;
 
@@ -59,28 +60,34 @@ public class Expense : BaseEntity<int>
     public string? Notes { get; set; }
 
     /// <summary>
-    /// Validates the consistency of the expense data.
+    /// Valida a consistência dos dados de uma despesa, verificando regras de negócio específicas.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown when validation fails.</exception>
-    public void Validate()
+    /// <param name="errors">
+    /// Uma lista de mensagens de erro retornadas caso alguma regra de validação seja violada.
+    /// </param>
+    /// <returns>
+    /// Retorna <c>true</c> se a validação passar sem erros; caso contrário, <c>false</c>.
+    /// </returns>
+    public bool Validate(out List<string> errors)
     {
+        errors = [];
         if (Value <= 0)
         {
-            throw new InvalidOperationException("O valor deve ser maior que zero.");
+            errors.Add("O valor deve ser maior que zero.");
         }
 
         if (Recurrence.IsRecurring)
         {
             if (EndDate.HasValue && EndDate < StartDate)
             {
-                throw new InvalidOperationException("A data final não pode ser anterior à data inicial.");
+                errors.Add("A data final não pode ser anterior à data inicial.");
             }
         }
         else
         {
             if (EndDate.HasValue && EndDate != StartDate)
             {
-                throw new InvalidOperationException("Para despesas não recorrentes, a data final deve ser igual à data inicial.");
+                errors.Add("Para despesas não recorrentes, a data final deve ser igual à data inicial.");
             }
 
             EndDate = StartDate;
@@ -88,9 +95,15 @@ public class Expense : BaseEntity<int>
 
         if (UserCode <= 0)
         {
-            throw new InvalidOperationException("O código do usuário deve ser um número inteiro positivo.");
+            errors.Add("O código do usuário deve ser um número inteiro positivo.");
         }
-        Recurrence.Validate();
-        PaymentMethod.Validate(Value);
+
+        if(!Recurrence.Validate(out var errorsRecurrence)) 
+            errors.AddRange(errorsRecurrence);
+
+        if (!PaymentMethod.Validate(Value, out var errorsPaymentMethod)) 
+            errors.AddRange(errorsPaymentMethod);
+
+        return errors.Count == 0;
     }
 }

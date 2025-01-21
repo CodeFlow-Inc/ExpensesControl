@@ -59,35 +59,43 @@ public class PaymentMethod
     public string? Notes { get; set; }
 
     /// <summary>
-    /// Validates the consistency of the payment method data.
+    /// Validates the installment payment rules and adds error messages to the output parameter.
     /// </summary>
     /// <param name="totalValue">The total value of the payment.</param>
-    /// <exception cref="InvalidOperationException">Thrown when validation fails.</exception>
-    public void Validate(decimal totalValue)
+    /// <param name="errors">An output list containing error messages if validation fails.</param>
+    /// <returns>
+    /// Returns <c>true</c> if validation passes without errors; otherwise, <c>false</c>.
+    /// </returns>
+    public bool Validate(decimal totalValue, out List<string> errors)
     {
+        errors = [];
+
         if (IsInstallment)
         {
             if (InstallmentCount == null || InstallmentCount <= 0)
             {
-                throw new InvalidOperationException("O número de parcelas deve ser maior que zero para pagamentos parcelados.");
+                errors.Add("The number of installments must be greater than zero for installment payments.");
             }
 
             if (InstallmentValue == null || InstallmentValue <= 0)
             {
-                throw new InvalidOperationException("O valor da parcela deve ser maior que zero para pagamentos parcelados.");
+                errors.Add("The installment value must be greater than zero for installment payments.");
             }
 
-            if (InstallmentCount * InstallmentValue != totalValue)
+            if (InstallmentCount.HasValue && InstallmentValue.HasValue &&
+                InstallmentCount * InstallmentValue != totalValue)
             {
-                throw new InvalidOperationException("O valor total das parcelas deve ser igual ao valor total do pagamento.");
+                errors.Add("The total value of installments must equal the total payment value.");
             }
         }
         else
         {
             if (InstallmentCount.HasValue || InstallmentValue.HasValue)
             {
-                throw new InvalidOperationException("Pagamentos não parcelados não devem ter número de parcelas ou valor de parcela.");
+                errors.Add("Non-installment payments must not have installment count or installment value.");
             }
         }
+
+        return errors.Count == 0;
     }
 }
