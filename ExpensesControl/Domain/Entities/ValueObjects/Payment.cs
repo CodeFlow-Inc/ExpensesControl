@@ -1,35 +1,33 @@
 ﻿using ExpensesControl.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExpensesControl.Domain.Entities.ValueObjects;
 
 /// <summary>
 /// Represents a payment method for an expense.
 /// </summary>
-public class PaymentMethod
+public class Payment
 {
-    public PaymentMethod()
+    public Payment()
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PaymentMethod"/> class.
+    /// Initializes a new instance of the <see cref="Payment"/> class.
     /// </summary>
     /// <param name="type">The type of payment.</param>
     /// <param name="isInstallment">Indicates whether the payment is in installments.</param>
     /// <param name="installmentCount">The number of installments.</param>
-    /// <param name="installmentValue">The value of each installment.</param>
     /// <param name="notes">Additional notes about the payment.</param>
-    public PaymentMethod(
+    public Payment(
         PaymentType type,
         bool isInstallment = false,
         int? installmentCount = null,
-        decimal? installmentValue = null,
         string? notes = null)
     {
         Type = type;
         IsInstallment = isInstallment;
         InstallmentCount = installmentCount;
-        InstallmentValue = installmentValue;
         Notes = notes;
     }
 
@@ -49,24 +47,29 @@ public class PaymentMethod
     public int? InstallmentCount { get; set; }
 
     /// <summary>
-    /// Value of each installment, applicable if the payment is in installments.
-    /// </summary>
-    public decimal? InstallmentValue { get; set; }
-
-    /// <summary>
     /// Additional details or notes about the payment method.
     /// </summary>
     public string? Notes { get; set; }
 
     /// <summary>
+    /// Gets the value of each installment based on the total value and installment count.
+    /// </summary>
+    [NotMapped]
+    public decimal? InstallmentValue => InstallmentCount.HasValue && InstallmentCount > 0 ? TotalValue / InstallmentCount.Value : null;
+
+    /// <summary>
+    /// Total value of the payment (e.g., total cost of the expense).
+    /// </summary>
+    public decimal TotalValue { get; set; }
+
+    /// <summary>
     /// Validates the installment payment rules and adds error messages to the output parameter.
     /// </summary>
-    /// <param name="totalValue">The total value of the payment.</param>
     /// <param name="errors">An output list containing error messages if validation fails.</param>
     /// <returns>
     /// Returns <c>true</c> if validation passes without errors; otherwise, <c>false</c>.
     /// </returns>
-    public bool Validate(decimal totalValue, out List<string> errors)
+    public bool Validate(out List<string> errors)
     {
         errors = [];
 
@@ -74,25 +77,24 @@ public class PaymentMethod
         {
             if (InstallmentCount == null || InstallmentCount <= 0)
             {
-                errors.Add("The number of installments must be greater than zero for installment payments.");
+                errors.Add("O número de parcelas deve ser maior que zero para pagamentos parcelados.");
             }
 
-            if (InstallmentValue == null || InstallmentValue <= 0)
+            if (InstallmentValue <= 0)
             {
-                errors.Add("The installment value must be greater than zero for installment payments.");
+                errors.Add("O valor da parcela deve ser maior que zero para pagamentos parcelados.");
             }
 
-            if (InstallmentCount.HasValue && InstallmentValue.HasValue &&
-                InstallmentCount * InstallmentValue != totalValue)
+            if (InstallmentCount.HasValue && InstallmentValue > 0 && InstallmentCount.Value * InstallmentValue != TotalValue)
             {
-                errors.Add("The total value of installments must equal the total payment value.");
+                errors.Add("O valor total das parcelas deve ser igual ao valor total do pagamento.");
             }
         }
         else
         {
-            if (InstallmentCount.HasValue || InstallmentValue.HasValue)
+            if (InstallmentCount.HasValue)
             {
-                errors.Add("Non-installment payments must not have installment count or installment value.");
+                errors.Add("Pagamentos não parcelados não devem ter número de parcelas.");
             }
         }
 

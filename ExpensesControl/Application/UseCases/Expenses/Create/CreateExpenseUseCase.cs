@@ -33,10 +33,11 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
                 var expense = input.Adapt<Expense>();
                 try
                 {
-                    if (expense.Validate(out var errorsDoamin))
+                    if (!expense.Validate(out var errorsDoamin))
                     {
                         logger.LogWarning("Failed to validate domain.");
                         output.AddErrorMessages(errorsDoamin);
+                        return output;
                     }
 
                     var createdExpense = await expenseRepository.CreateAsync(expense);

@@ -2,7 +2,6 @@
 using ExpensesControl.Domain.Entities.Base;
 using ExpensesControl.Domain.Entities.ValueObjects;
 using ExpensesControl.Domain.Enums;
-using System.Collections.Generic;
 
 namespace ExpensesControl.Domain.Entities.AggregateRoot;
 
@@ -21,11 +20,6 @@ public class Expense : BaseEntity<int>
     /// Description of the expense.
     /// </summary>
     public string? Description { get; set; }
-
-    /// <summary>
-    /// Value or amount of the expense.
-    /// </summary>
-    public decimal Value { get; set; }
 
     /// <summary>
     /// Start date when the expense was incurred.
@@ -50,9 +44,9 @@ public class Expense : BaseEntity<int>
     public Recurrence Recurrence { get; set; } = new Recurrence();
 
     /// <summary>
-    /// Payment method used for the expense.
+    /// Payment for the expense.
     /// </summary>
-    public PaymentMethod PaymentMethod { get; set; } = new PaymentMethod();
+    public Payment Payment { get; set; } = new Payment();
 
     /// <summary>
     /// Additional notes or details about the expense.
@@ -71,10 +65,6 @@ public class Expense : BaseEntity<int>
     public bool Validate(out List<string> errors)
     {
         errors = [];
-        if (Value <= 0)
-        {
-            errors.Add("O valor deve ser maior que zero.");
-        }
 
         if (Recurrence.IsRecurring)
         {
@@ -101,7 +91,7 @@ public class Expense : BaseEntity<int>
         if(!Recurrence.Validate(out var errorsRecurrence)) 
             errors.AddRange(errorsRecurrence);
 
-        if (!PaymentMethod.Validate(Value, out var errorsPaymentMethod)) 
+        if (!Payment.Validate(out var errorsPaymentMethod)) 
             errors.AddRange(errorsPaymentMethod);
 
         return errors.Count == 0;

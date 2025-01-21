@@ -24,13 +24,6 @@ public class CreateExpenseInput : BaseInput<CreateExpenseOutput>
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
-    /// Value or amount of the expense.
-    /// </summary>
-    [Required]
-    [Range(0.01, double.MaxValue, ErrorMessage = "The value must be greater than zero.")]
-    public decimal Value { get; set; }
-
-    /// <summary>
     /// Start date of the expense.
     /// </summary>
     [Required]
@@ -51,13 +44,13 @@ public class CreateExpenseInput : BaseInput<CreateExpenseOutput>
     /// Recurrence details of the expense.
     /// </summary>
     [Required]
-    public Recurrence Recurrence { get; set; } = new Recurrence();
+    public CreateExpenseRecurrenceInput Recurrence { get; set; } = new CreateExpenseRecurrenceInput();
 
     /// <summary>
     /// Payment method of the expense.
     /// </summary>
     [Required]
-    public PaymentMethod PaymentMethod { get; set; } = new PaymentMethod();
+    public CreateExpensePaymentInput PaymentMethod { get; set; } = new CreateExpensePaymentInput();
 
     /// <summary>
     /// Additional notes about the expense.
