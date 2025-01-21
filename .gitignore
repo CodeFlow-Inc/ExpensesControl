@@ -399,3 +399,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /ExpensesControl/WebApi/appsettings.Development.json
+/ExpensesControl/WebApi/appsettings.Development.json
