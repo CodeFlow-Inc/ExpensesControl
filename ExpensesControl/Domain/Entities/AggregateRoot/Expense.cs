@@ -54,13 +54,13 @@ public class Expense : BaseEntity<int>
     public string? Notes { get; set; }
 
     /// <summary>
-    /// Valida a consistência dos dados de uma despesa, verificando regras de negócio específicas.
+    /// Validates the consistency of expense data by checking specific business rules.
     /// </summary>
     /// <param name="errors">
-    /// Uma lista de mensagens de erro retornadas caso alguma regra de validação seja violada.
+    /// A list of error messages returned if any validation rule is violated.
     /// </param>
     /// <returns>
-    /// Retorna <c>true</c> se a validação passar sem erros; caso contrário, <c>false</c>.
+    /// Returns <c>true</c> if the validation passes without errors; otherwise, <c>false</c>.
     /// </returns>
     public bool Validate(out List<string> errors)
     {

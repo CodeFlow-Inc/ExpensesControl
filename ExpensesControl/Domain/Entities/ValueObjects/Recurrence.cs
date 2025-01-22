@@ -24,11 +24,11 @@ public class Recurrence
     public int? MaxOccurrences { get; set; }
 
     /// <summary>
-    /// Valida as regras relacionadas à recorrência de uma despesa, adicionando erros ao parâmetro de saída.
+    /// Validates the rules related to the recurrence of an expense, adding errors to the output parameter.
     /// </summary>
-    /// <param name="errors">Uma lista de mensagens de erro retornadas caso alguma regra de validação seja violada.</param>
+    /// <param name="errors">A list of error messages returned if any validation rule is violated.</param>
     /// <returns>
-    /// Retorna <c>true</c> se a validação passar sem erros; caso contrário, <c>false</c>.
+    /// Returns <c>true</c> if the validation passes without errors; otherwise, <c>false</c>.
     /// </returns>
     public bool Validate(out List<string> errors)
     {
