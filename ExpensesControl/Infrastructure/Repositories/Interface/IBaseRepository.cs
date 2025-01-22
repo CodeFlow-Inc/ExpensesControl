@@ -13,4 +13,5 @@ public interface IBaseRepository<T, TKey>
     IQueryable<T> ListBySpecification(ISpecification<T> specification);
     Task<List<T>> ListBySpecificationAsync(ISpecification<T> specification);
     Task<int> UpdateAsync(T entity, TKey id);
+    Task<int> SaveChangesAsync();
 }

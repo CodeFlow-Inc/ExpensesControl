@@ -28,7 +28,7 @@ Log.Information("Starting up");
 
 string? sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.ConfigureDatabaseSqlServer(sqlConnection!);
-//builder.Services.UpdateMigrationDatabase();
+builder.Services.UpdateMigrationDatabase();
 
 builder.Services.AddDependencyInjection();
 

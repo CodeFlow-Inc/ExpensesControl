@@ -17,6 +17,7 @@ namespace ExpensesControl.WebApi.Config
         {
             services
                 .ConfigureRepositoryIoc()
+                .ConfigureValidator()
                 .AddMediatR();
 
             return services;

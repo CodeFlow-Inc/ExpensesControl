@@ -1,6 +1,8 @@
-﻿using ExpensesControl.Application.UseCases.Expenses.Create.Dto;
+﻿using ExpensesControl.Application.Extensions;
+using ExpensesControl.Application.UseCases.Expenses.Create.Dto;
 using ExpensesControl.Domain.Entities.AggregateRoot;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
+using FluentValidation;
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,7 +16,10 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
     /// </summary>
     /// <param name="expenseRepository">The repository for managing expenses.</param>
     /// <param name="logger">The logger for logging information and errors.</param>
-    public class CreateExpenseUseCase(IExpenseRepository expenseRepository, ILogger<CreateExpenseUseCase> logger) : IRequestHandler<CreateExpenseInput, CreateExpenseOutput>
+    public class CreateExpenseUseCase(
+        IExpenseRepository expenseRepository,
+        IValidator<CreateExpenseInput> validator,
+        ILogger<CreateExpenseUseCase> logger) : IRequestHandler<CreateExpenseInput, CreateExpenseOutput>
     {
         /// <summary>
         /// Handles the creation of a new expense.
@@ -24,25 +29,29 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
         /// <returns>An output object containing the result of the expense creation process.</returns>
         public async Task<CreateExpenseOutput> Handle(CreateExpenseInput input, CancellationToken cancellationToken)
         {
-            using (LogContext.Push (
+            using (LogContext.Push(
                         new PropertyEnricher("UserCode", input.UserCode)))
             {
-                logger.LogInformation("Starting the process of creating a new expense.");
-
+                logger.LogDebug("Starting the process of creating a new expense.");
                 var output = new CreateExpenseOutput();
+
+                if (!await validator.ValidateAndAddErrorsAsync(input, logger, output, cancellationToken))
+                    return output;
+
                 var expense = input.Adapt<Expense>();
                 try
                 {
-                    if (!expense.Validate(out var errorsDoamin))
+                    expense.SetCurrentUser(input.UserCode.ToString());
+                    var createdExpense = await expenseRepository.CreateAsync(expense);
+                    if (!createdExpense.Validate(out var errorsDoamin))
                     {
                         logger.LogWarning("Failed to validate domain.");
-                        output.AddErrorMessages(errorsDoamin);
-                        return output;
+                        return output.AddErrorMessages<CreateExpenseOutput>(errorsDoamin);
                     }
 
-                    var createdExpense = await expenseRepository.CreateAsync(expense);
-
+                    _ = await expenseRepository.SaveChangesAsync();
                     logger.LogInformation("Expense successfully created. ID: {ExpenseId}", createdExpense.Id);
+
                     output.SetResult(new(createdExpense.Id));
                     return output;
                 }
@@ -53,8 +62,7 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
                 )
                 {
                     logger.LogWarning("Expected error occurred: {ErrorMessage}", expectedError.Message);
-                    output.AddErrorMessage(expectedError.Message);
-                    return output;
+                    return output.AddErrorMessage<CreateExpenseOutput>(expectedError.Message);
                 }
             }
         }

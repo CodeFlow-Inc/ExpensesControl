@@ -28,8 +28,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Repositories
         public virtual async Task<T> CreateAsync(T entity)
         {
             _logger.LogInformation("Creating a new entity.");
-            EntityEntry<T> ret = _context.Set<T>().Add(entity);
-            await _context.SaveChangesAsync();
+            EntityEntry<T> ret = await _context.Set<T>().AddAsync(entity);
             _logger.LogInformation("Entity created successfully.");
             return ret.Entity;
         }
@@ -44,10 +43,9 @@ namespace ExpensesControl.Infrastructure.SqlServer.Repositories
             // Check if the entity exists in the database
             var existingEntity = await _context.Set<T>().FindAsync(id) ?? throw new KeyNotFoundException("Entidade não encontrada.");
             _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-            int result = await _context.SaveChangesAsync();
 
             _logger.LogInformation("Entity updated successfully.");
-            return result;
+            return 1; // Return 1 to indicate success
         }
 
         /// <summary>
@@ -61,7 +59,6 @@ namespace ExpensesControl.Infrastructure.SqlServer.Repositories
             var existingEntity = await _context.Set<T>().FindAsync(id) ?? throw new KeyNotFoundException("Entidade não encontrada.");
             EntityEntry<T>? entry = _context.Entry(existingEntity);
             entry.State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
 
             _logger.LogInformation("Entity deleted successfully.");
             return true;
@@ -144,6 +141,14 @@ namespace ExpensesControl.Infrastructure.SqlServer.Repositories
         {
             _logger.LogInformation("Retrieving a single entity asynchronously based on a specification.");
             return await specification.Apply(_context.Set<T>().AsQueryable()).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Persists changes to the database asynchronously.
+        /// </summary>
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
     }
 }
