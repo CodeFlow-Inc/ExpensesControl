@@ -18,6 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFi
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{9E72379F-437E-4093-97EE-58993DCDB4BE}"
+	ProjectSection(SolutionItems) = preProject
+		..\SQL\dbo.expenses.data.sql = ..\SQL\dbo.expenses.data.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

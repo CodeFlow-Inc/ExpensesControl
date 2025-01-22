@@ -24,24 +24,32 @@ public class Recurrence
     public int? MaxOccurrences { get; set; }
 
     /// <summary>
-    /// Validates the consistency of the recurrence data.
+    /// Validates the rules related to the recurrence of an expense, adding errors to the output parameter.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown when validation fails.</exception>
-    public void Validate()
+    /// <param name="errors">A list of error messages returned if any validation rule is violated.</param>
+    /// <returns>
+    /// Returns <c>true</c> if the validation passes without errors; otherwise, <c>false</c>.
+    /// </returns>
+    public bool Validate(out List<string> errors)
     {
+        errors = [];
+
         if (IsRecurring)
         {
             if (MaxOccurrences.HasValue && MaxOccurrences <= 0)
             {
-                throw new InvalidOperationException("O número máximo de ocorrências deve ser maior que zero.");
+                errors.Add("O número máximo de ocorrências deve ser maior que zero.");
             }
         }
         else
         {
             if (MaxOccurrences.HasValue)
             {
-                throw new InvalidOperationException("Despesas não recorrentes não devem ter número máximo de ocorrências.");
+                errors.Add("Despesas não recorrentes não devem ter número máximo de ocorrências.");
             }
         }
+
+        return errors.Count == 0;
     }
+
 }

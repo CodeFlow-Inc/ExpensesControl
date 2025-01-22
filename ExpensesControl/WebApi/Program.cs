@@ -4,6 +4,7 @@ using ExpensesControl.Infrastructure.SqlServer.Ioc;
 using ExpensesControl.WebApi.Config;
 using ExpensesControl.WebApi.Config.Filters;
 using ExpensesControl.WebApi.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Text.Json.Serialization;
 using static ExpensesControl.Application.Extensions.EnumExtensions;
@@ -28,7 +29,8 @@ Log.Information("Starting up");
 string? sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.ConfigureDatabaseSqlServer(sqlConnection!);
 builder.Services.UpdateMigrationDatabase();
-builder.Services.ConfigureRepositoryIoc();
+
+builder.Services.AddDependencyInjection();
 
 builder.Services.AddHealthChecks();
 
@@ -48,6 +50,13 @@ builder.Services.AddControllers(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+});
 builder.Services.ConfigureSwagger();
 
 // =====================================
@@ -59,7 +68,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExpensesControlAPI v1");
+    });
 }
 
 app.UseHttpsRedirection();

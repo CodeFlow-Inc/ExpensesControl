@@ -32,12 +32,6 @@ public class ExpenseConfiguration : BaseEntityConfiguration<Expense, int>
             .IsRequired(false)
             .HasColumnName("description");
 
-        // Value (required)
-        builder.Property(e => e.Value)
-            .IsRequired()
-            .HasPrecision(18, 2) // Defines precision for monetary values
-            .HasColumnName("value");
-
         // StartDate (required)
         builder.Property(e => e.StartDate)
             .IsRequired()
@@ -60,24 +54,20 @@ public class ExpenseConfiguration : BaseEntityConfiguration<Expense, int>
             .IsRequired(false)
             .HasColumnName("notes");
 
-        // Configuration for the Value Object: PaymentMethod
-        builder.OwnsOne(e => e.PaymentMethod, paymentMethod =>
+        // Configuration for the Value Object: Payment
+        builder.OwnsOne(e => e.Payment, paymentMethod =>
         {
             paymentMethod.Property(p => p.Type)
                 .IsRequired()
                 .HasColumnName("payment_method_type");
 
-            paymentMethod.Property(p => p.IsInstallment)
+            paymentMethod.Property(e => e.TotalValue)
                 .IsRequired()
-                .HasColumnName("is_installment");
+                .HasPrecision(18, 2) // Defines precision for monetary values
+                .HasColumnName("total_value");
 
             paymentMethod.Property(p => p.InstallmentCount)
                 .HasColumnName("installment_count");
-
-            paymentMethod.Property(p => p.InstallmentValue)
-                .HasPrecision(18, 2) // Defines precision for monetary values
-                .IsRequired(false)
-                .HasColumnName("installment_value");
 
             paymentMethod.Property(p => p.Notes)
                 .HasMaxLength(500)

@@ -13,9 +13,10 @@ namespace ExpensesControl.Infrastructure.SqlServer.Ioc
         /// Configures IoC container for repository services.
         /// </summary>
         /// <param name="services">The service collection.</param>
-        public static void ConfigureRepositoryIoc(this IServiceCollection services)
+        public static IServiceCollection ConfigureRepositoryIoc(this IServiceCollection services)
         {
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            return services;
         }
     }
 }
