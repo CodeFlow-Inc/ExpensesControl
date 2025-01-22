@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpensesControl.Infrastructure.SqlServer.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20250119234152_Initial")]
+    [Migration("20250121232515_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -79,11 +79,6 @@ namespace ExpensesControl.Infrastructure.SqlServer.Migrations
                         .HasColumnType("int")
                         .HasColumnName("user_code");
 
-                    b.Property<decimal>("Value")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("value");
-
                     b.HasKey("Id");
 
                     b.ToTable("expenses", (string)null);
@@ -91,7 +86,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Migrations
 
             modelBuilder.Entity("ExpensesControl.Domain.Entities.AggregateRoot.Expense", b =>
                 {
-                    b.OwnsOne("ExpensesControl.Domain.Entities.ValueObjects.PaymentMethod", "PaymentMethod", b1 =>
+                    b.OwnsOne("ExpensesControl.Domain.Entities.ValueObjects.Payment", "Payment", b1 =>
                         {
                             b1.Property<int>("ExpenseId")
                                 .HasColumnType("int");
@@ -100,19 +95,18 @@ namespace ExpensesControl.Infrastructure.SqlServer.Migrations
                                 .HasColumnType("int")
                                 .HasColumnName("installment_count");
 
-                            b1.Property<decimal?>("InstallmentValue")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("installment_value");
-
                             b1.Property<bool>("IsInstallment")
-                                .HasColumnType("bit")
-                                .HasColumnName("is_installment");
+                                .HasColumnType("bit");
 
                             b1.Property<string>("Notes")
                                 .HasMaxLength(500)
                                 .HasColumnType("nvarchar(500)")
                                 .HasColumnName("payment_notes");
+
+                            b1.Property<decimal>("TotalValue")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("total_value");
 
                             b1.Property<int>("Type")
                                 .HasColumnType("int")
@@ -151,7 +145,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Migrations
                                 .HasForeignKey("ExpenseId");
                         });
 
-                    b.Navigation("PaymentMethod")
+                    b.Navigation("Payment")
                         .IsRequired();
 
                     b.Navigation("Recurrence")

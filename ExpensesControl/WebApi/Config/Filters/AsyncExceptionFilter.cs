@@ -27,11 +27,19 @@ namespace ExpensesControl.WebApi.Config.Filters
 
             logger.LogError(exception, "UnhandledException: {ExceptionType} - {Message}. {Log}", exception.GetType(), exception.Message, $"ReferenceId: {referenceId}");
 
-            var content = $"An unexpected error has occurred. You can use the following reference ID to help us diagnose your problem: {referenceId}";
+            var message = "Ocorreu um erro inesperado. Verifique os dados ou tente novamente mais tarde.";
+            var forDevs = $"Você pode usar o seguinte ID de referência para nos ajudar a diagnosticar seu problema: {referenceId}";
+
+            var responseContent = new
+            {
+                message,
+                forDevs,
+                referenceId
+            };
 
             context.Result = new ContentResult
             {
-                Content = JsonConvert.SerializeObject(content),
+                Content = JsonConvert.SerializeObject(responseContent),
                 StatusCode = StatusCodes.Status500InternalServerError,
                 ContentType = "application/json"
             };

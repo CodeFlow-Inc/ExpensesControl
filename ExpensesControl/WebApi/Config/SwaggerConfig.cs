@@ -1,6 +1,7 @@
-﻿using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
+﻿using ExpensesControl.WebApi.Config.Filters;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 namespace ExpensesControl.WebApi.Config
 {
@@ -17,20 +18,32 @@ namespace ExpensesControl.WebApi.Config
         /// <param name="services">The service collection to which Swagger services will be added.</param>
         public static void ConfigureSwagger(this IServiceCollection services)
         {
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ExpensesControlAPI", Version = "v1" });
+                // Gera o documento para a versão v1
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ExpensesControlAPI", Version = "v1" });
 
-                c.EnableAnnotations();
+                options.DocInclusionPredicate((version, apiDescription) =>
+                {
+                    var versions = apiDescription.ActionDescriptor.EndpointMetadata
+                        .OfType<ApiVersionAttribute>()
+                        .SelectMany(attr => attr.Versions);
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    return versions.Any(v => $"v{v}" == version);
+                });
+
+                options.OperationFilter<SwaggerVersionOperationFilter>();
+                options.EnableAnnotations();
+
+                // Configuração de segurança
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme",
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer"
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -41,10 +54,14 @@ namespace ExpensesControl.WebApi.Config
                                 Id = "Bearer"
                             }
                         },
-                        value
+                        Array.Empty<string>()
                     }
                 });
             });
+
+
+            services.ConfigureOptions<SwaggerUIVersionConfig>();
         }
+
     }
 }
