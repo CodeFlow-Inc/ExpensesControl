@@ -1,6 +1,7 @@
 ﻿using ExpensesControl.Application.Extensions;
 using ExpensesControl.Application.UseCases.Expenses.Create.Dto;
 using ExpensesControl.Domain.Entities.AggregateRoot;
+using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using FluentValidation;
 using Mapster;
@@ -17,7 +18,7 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
     /// <param name="expenseRepository">The repository for managing expenses.</param>
     /// <param name="logger">The logger for logging information and errors.</param>
     public class CreateExpenseUseCase(
-        IExpenseRepository expenseRepository,
+        IUnitOfWork unitOfWork,
         IValidator<CreateExpenseInput> validator,
         ILogger<CreateExpenseUseCase> logger) : IRequestHandler<CreateExpenseInput, CreateExpenseOutput>
     {
@@ -42,15 +43,18 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
                 try
                 {
                     expense.SetCurrentUser(input.UserCode.ToString());
-                    var createdExpense = await expenseRepository.CreateAsync(expense);
+
+                    #region TRANSACTION
+                    await unitOfWork.BeginTransactionAsync(cancellationToken);
+                    var createdExpense = await unitOfWork.ExpenseRepository.CreateAsync(expense);
                     if (!createdExpense.Validate(out var errorsDoamin))
                     {
                         logger.LogWarning("Failed to validate domain.");
                         return output.AddErrorMessages<CreateExpenseOutput>(errorsDoamin);
                     }
-
-                    _ = await expenseRepository.SaveChangesAsync();
+                    await unitOfWork.CommitAsync(cancellationToken);
                     logger.LogInformation("Expense successfully created. ID: {ExpenseId}", createdExpense.Id);
+                    #endregion
 
                     output.SetResult(new(createdExpense.Id));
                     return output;
