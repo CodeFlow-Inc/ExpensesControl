@@ -1,15 +1,15 @@
-﻿using ExpensesControl.Application.UseCases.Expenses.Create.Dto;
+﻿using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
 using FluentValidation;
 
 namespace ExpensesControl.Application.UseCases.Expenses.Create.Validator
 {
     /// <summary>
-    /// Validator class for the CreateExpenseRecurrenceInput DTO.
+    /// Validator class for the CreateExpenseRecurrenceRequest DTO.
     /// Validates the recurrence details when creating a new expense.
     /// </summary>
-    public class CreateExpenseRecurrenceInputValidator : AbstractValidator<CreateExpenseRecurrenceInput>
+    public class CreateExpenseRecurrenceRequestValidator : AbstractValidator<CreateExpenseRecurrenceRequest>
     {
-        public CreateExpenseRecurrenceInputValidator()
+        public CreateExpenseRecurrenceRequestValidator()
         {
             RuleFor(x => x.IsRecurring)
                 .NotNull().WithMessage("A informação sobre recorrência é obrigatória.");

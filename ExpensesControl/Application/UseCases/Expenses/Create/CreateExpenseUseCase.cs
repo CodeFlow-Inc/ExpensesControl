@@ -1,5 +1,6 @@
 ﻿using ExpensesControl.Application.Extensions;
-using ExpensesControl.Application.UseCases.Expenses.Create.Dto;
+using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
+using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Response;
 using ExpensesControl.Domain.Entities.AggregateRoot;
 using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
@@ -19,30 +20,30 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
     /// <param name="logger">The logger for logging information and errors.</param>
     public class CreateExpenseUseCase(
         IUnitOfWork unitOfWork,
-        IValidator<CreateExpenseInput> validator,
-        ILogger<CreateExpenseUseCase> logger) : IRequestHandler<CreateExpenseInput, CreateExpenseOutput>
+        IValidator<CreateExpenseRequest> validator,
+        ILogger<CreateExpenseUseCase> logger) : IRequestHandler<CreateExpenseRequest, CreateExpenseResponse>
     {
         /// <summary>
         /// Handles the creation of a new expense.
         /// </summary>
-        /// <param name="input">The input data for creating the expense.</param>
+        /// <param name="request">The request data for creating the expense.</param>
         /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-        /// <returns>An output object containing the result of the expense creation process.</returns>
-        public async Task<CreateExpenseOutput> Handle(CreateExpenseInput input, CancellationToken cancellationToken)
+        /// <returns>An response object containing the result of the expense creation process.</returns>
+        public async Task<CreateExpenseResponse> Handle(CreateExpenseRequest request, CancellationToken cancellationToken)
         {
             using (LogContext.Push(
-                        new PropertyEnricher("UserCode", input.UserCode)))
+                        new PropertyEnricher("UserCode", request.UserCode)))
             {
                 logger.LogDebug("Starting the process of creating a new expense.");
-                var output = new CreateExpenseOutput();
+                var response = new CreateExpenseResponse();
 
-                if (!await validator.ValidateAndAddErrorsAsync(input, logger, output, cancellationToken))
-                    return output;
+                if (!await validator.ValidateAndAddErrorsAsync(request, logger, response, cancellationToken))
+                    return response;
 
-                var expense = input.Adapt<Expense>();
+                var expense = request.Adapt<Expense>();
                 try
                 {
-                    expense.SetCurrentUser(input.UserCode.ToString());
+                    expense.SetCurrentUser(request.UserCode.ToString());
 
                     #region TRANSACTION
                     await unitOfWork.BeginTransactionAsync(cancellationToken);
@@ -50,14 +51,14 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
                     if (!createdExpense.Validate(out var errorsDoamin))
                     {
                         logger.LogWarning("Failed to validate domain.");
-                        return output.AddErrorMessages<CreateExpenseOutput>(errorsDoamin);
+                        return response.AddErrorMessages<CreateExpenseResponse>(errorsDoamin);
                     }
                     await unitOfWork.CommitAsync(cancellationToken);
                     logger.LogInformation("Expense successfully created. ID: {ExpenseId}", createdExpense.Id);
                     #endregion
 
-                    output.SetResult(new(createdExpense.Id));
-                    return output;
+                    response.SetResult(new(createdExpense.Id));
+                    return response;
                 }
                 catch (Exception expectedError) when
                 (
@@ -66,7 +67,7 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
                 )
                 {
                     logger.LogWarning("Expected error occurred: {ErrorMessage}", expectedError.Message);
-                    return output.AddErrorMessage<CreateExpenseOutput>(expectedError.Message);
+                    return response.AddErrorMessage<CreateExpenseResponse>(expectedError.Message);
                 }
             }
         }

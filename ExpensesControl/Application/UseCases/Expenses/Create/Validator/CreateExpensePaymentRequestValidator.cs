@@ -1,15 +1,15 @@
-﻿using ExpensesControl.Application.UseCases.Expenses.Create.Dto;
+﻿using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
 using FluentValidation;
 
 namespace ExpensesControl.Application.UseCases.Expenses.Create.Validator;
 
 /// <summary>
-/// Validator class for the CreateExpensePaymentInput DTO.
+/// Validator class for the CreateExpensePaymentRequest DTO.
 /// Validates the payment details when creating a new expense.
 /// </summary>
-public class CreateExpensePaymentInputValidator : AbstractValidator<CreateExpensePaymentInput>
+public class CreateExpensePaymentRequestValidator : AbstractValidator<CreateExpensePaymentRequest>
 {
-    public CreateExpensePaymentInputValidator()
+    public CreateExpensePaymentRequestValidator()
     {
         RuleFor(x => x.Type)
             .IsInEnum().WithMessage("O tipo de pagamento é obrigatório.");

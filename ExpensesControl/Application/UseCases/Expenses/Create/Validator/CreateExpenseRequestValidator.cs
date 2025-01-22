@@ -1,15 +1,15 @@
-﻿using ExpensesControl.Application.UseCases.Expenses.Create.Dto;
+﻿using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
 using FluentValidation;
 
 namespace ExpensesControl.Application.UseCases.Expenses.Create.Validator;
 
 /// <summary>
-/// Validator class for the CreateExpenseInput DTO.
-/// Validates the input data when creating a new expense.
+/// Validator class for the CreateExpenseRequest DTO.
+/// Validates the request data when creating a new expense.
 /// </summary>
-public class CreateExpenseInputValidator : AbstractValidator<CreateExpenseInput>
+public class CreateExpenseRequestValidator : AbstractValidator<CreateExpenseRequest>
 {
-    public CreateExpenseInputValidator()
+    public CreateExpenseRequestValidator()
     {
         RuleFor(x => x.UserCode)
             .NotEmpty().WithMessage("O código do usuário é obrigatório.");
@@ -25,10 +25,10 @@ public class CreateExpenseInputValidator : AbstractValidator<CreateExpenseInput>
             .IsInEnum().WithMessage("A categoria é obrigatória.");
 
         RuleFor(x => x.Recurrence)
-            .SetValidator(new CreateExpenseRecurrenceInputValidator());
+            .SetValidator(new CreateExpenseRecurrenceRequestValidator());
 
         RuleFor(x => x.PaymentMethod)
-            .SetValidator(new CreateExpensePaymentInputValidator());
+            .SetValidator(new CreateExpensePaymentRequestValidator());
 
         RuleFor(x => x.Notes)
             .MaximumLength(500).WithMessage("As notas devem ter no máximo 500 caracteres.");

@@ -63,9 +63,9 @@ public class Payment
     public decimal TotalValue { get; set; }
 
     /// <summary>
-    /// Validates the installment payment rules and adds error messages to the output parameter.
+    /// Validates the installment payment rules and adds error messages to the response parameter.
     /// </summary>
-    /// <param name="errors">An output list containing error messages if validation fails.</param>
+    /// <param name="errors">An response list containing error messages if validation fails.</param>
     /// <returns>
     /// Returns <c>true</c> if validation passes without errors; otherwise, <c>false</c>.
     /// </returns>

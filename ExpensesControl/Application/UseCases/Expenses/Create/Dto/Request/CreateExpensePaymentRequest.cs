@@ -1,8 +1,8 @@
 ﻿using ExpensesControl.Domain.Enums;
 
-namespace ExpensesControl.Application.UseCases.Expenses.Create.Dto;
+namespace ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
 
-public class CreateExpensePaymentInput
+public class CreateExpensePaymentRequest
 {
     public PaymentType Type { get; set; }
     public bool IsInstallment { get; set; }
@@ -10,4 +10,3 @@ public class CreateExpensePaymentInput
     public decimal TotalValue { get; set; }
     public string? Notes { get; set; }
 }
-    

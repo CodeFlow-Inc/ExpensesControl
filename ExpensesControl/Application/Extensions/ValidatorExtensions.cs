@@ -7,22 +7,22 @@ namespace ExpensesControl.Application.Extensions;
 public static class ValidatorExtensions
 {
     /// <summary>
-    /// Validates an input using FluentValidation and adds error messages to the output if validation fails.
+    /// Validates an request using FluentValidation and adds error messages to the response if validation fails.
     /// </summary>
-    /// <typeparam name="TInput">The type of the input object to validate.</typeparam>
+    /// <typeparam name="TRequest">The type of the request object to validate.</typeparam>
     /// <param name="validator">The FluentValidation validator instance.</param>
-    /// <param name="input">The input object to validate.</param>
-    /// <param name="output">The output object to add error messages to.</param>
+    /// <param name="request">The request object to validate.</param>
+    /// <param name="response">The response object to add error messages to.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A boolean indicating whether the validation succeeded or not.</returns>
-    public static async Task<bool> ValidateAndAddErrorsAsync<TInput>(this IValidator<TInput> validator, TInput input, ILogger logger,  BaseOutput output, CancellationToken cancellationToken)
+    public static async Task<bool> ValidateAndAddErrorsAsync<TRequest>(this IValidator<TRequest> validator, TRequest request, ILogger logger,  BaseResponse response, CancellationToken cancellationToken)
     {
-        var validationResult = await validator.ValidateAsync(input, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            logger.LogWarning("Validation failed. Errors: {ValidationErrors}", string.Join(", ", output.ErrorMessages));
-            output.AddErrorMessages<BaseOutput>(validationResult.Errors.Select(e => e.ErrorMessage).ToArray());
+            logger.LogWarning("Validation failed. Errors: {ValidationErrors}", string.Join(", ", response.ErrorMessages));
+            response.AddErrorMessages<BaseResponse>(validationResult.Errors.Select(e => e.ErrorMessage).ToArray());
             return false;
         }
 

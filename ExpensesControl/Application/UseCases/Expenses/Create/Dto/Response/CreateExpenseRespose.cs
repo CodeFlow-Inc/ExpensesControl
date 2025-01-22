@@ -1,28 +1,28 @@
 ﻿using ExpensesControl.Application.UseCases.Base;
 
-namespace ExpensesControl.Application.UseCases.Expenses.Create.Dto;
+namespace ExpensesControl.Application.UseCases.Expenses.Create.Dto.Response;
 
 /// <summary>
 /// Response after creating an expense.
 /// </summary>
-public class CreateExpenseOutput : BaseOutput, IResultOutput<CreateOutput>
+public class CreateExpenseResponse : BaseResponse, IResultResponse<CreateResponse>
 {
     /// <summary>
-    /// The output value of the use case.
+    /// The response value of the use case.
     /// </summary>
-    public CreateOutput? Result { get; set; } = default;
+    public CreateResponse? Result { get; set; } = default;
 
     /// <summary>
     /// Sets the result of the use case.
     /// </summary>
     /// <param name="result">The result returned by the use case.</param>
-    public void SetResult(CreateOutput result)
+    public void SetResult(CreateResponse result)
     {
         Result = result;
     }
 }
 
-public class CreateOutput(int id)
+public class CreateResponse(int id)
 {
     public int Id { get; set; } = id;
 }

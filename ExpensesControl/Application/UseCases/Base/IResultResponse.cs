@@ -1,6 +1,6 @@
 ﻿namespace ExpensesControl.Application.UseCases.Base;
 
-public interface IResultOutput<T>
+public interface IResultResponse<T>
 {
     public T? Result { get; set; }
 
