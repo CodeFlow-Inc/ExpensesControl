@@ -2,7 +2,6 @@
 using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Response;
 using ExpensesControl.Domain.Entities.AggregateRoot;
-using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using FluentValidation;
 using Mapster;
@@ -47,11 +46,11 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
 
                     #region TRANSACTION
                     await unitOfWork.BeginTransactionAsync(cancellationToken);
-                    var createdExpense = await unitOfWork.ExpenseRepository.CreateAsync(expense);
-                    if (!createdExpense.Validate(out var errorsDoamin))
+                    var createdExpense = await unitOfWork.ExpenseRepository.CreateAsync(expense, cancellationToken);
+                    if (!createdExpense.Validate(out var domainErrors))
                     {
                         logger.LogWarning("Failed to validate domain.");
-                        return response.AddErrorMessages<CreateExpenseResponse>(errorsDoamin);
+                        return response.AddErrorMessages<CreateExpenseResponse>(domainErrors);
                     }
                     await unitOfWork.CommitAsync(cancellationToken);
                     logger.LogInformation("Expense successfully created. ID: {ExpenseId}", createdExpense.Id);
@@ -66,6 +65,7 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
                     expectedError is KeyNotFoundException
                 )
                 {
+                    await unitOfWork.RollbackAsync();
                     logger.LogWarning("Expected error occurred: {ErrorMessage}", expectedError.Message);
                     return response.AddErrorMessage<CreateExpenseResponse>(expectedError.Message);
                 }
