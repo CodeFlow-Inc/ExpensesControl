@@ -1,5 +1,4 @@
-﻿using ExpensesControl.Domain.Enums;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace ExpensesControl.Application.UseCases.Base;
 
@@ -63,6 +62,7 @@ public abstract class BaseResponse
     /// <param name="errorMessages">A list of error messages.</param>
     public T AddErrorMessages<T>(ErrorType errorType = (ErrorType)400, params string[] errorMessages) where T : BaseResponse
     {
+        ErrorType = errorType;
         foreach (var errorMessage in errorMessages)
         {
             _errorMessages.Add(errorMessage);

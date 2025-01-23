@@ -1,6 +1,5 @@
 ﻿using ExpensesControl.Application.UseCases.Base;
 using ExpensesControl.Domain.Entities.Tracking;
-using ExpensesControl.Domain.Enums;
 using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using MediatR;
 using Microsoft.Extensions.Configuration;

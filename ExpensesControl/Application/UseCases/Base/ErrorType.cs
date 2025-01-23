@@ -1,4 +1,4 @@
-﻿namespace ExpensesControl.Domain.Enums;
+﻿namespace ExpensesControl.Application.UseCases.Base;
 
 /// <summary>
 /// Enum to categorize error types.

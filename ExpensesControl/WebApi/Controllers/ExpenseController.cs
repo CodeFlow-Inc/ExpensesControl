@@ -25,14 +25,13 @@ public class ExpenseController(IMediator mediator) : ControllerBase
     [SwaggerResponse(StatusCodes.Status200OK, "Expense created successfully", typeof(CreateExpenseResponse))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request data", typeof(BaseResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal error", typeof(BaseResponse))]
-
     public async Task<IActionResult> CreateExpense([FromBody] CreateExpenseRequest request)
     {
         var response = await mediator.Send(request);
 
         if (response.IsValid) return Ok(response);
 
-        if (!response.IsValid && response.ErrorType == Domain.Enums.ErrorType.BusinessRuleError)
+        if (!response.IsValid && response.ErrorType == ErrorType.BusinessRuleError)
             return BadRequest(response);
         else
             return StatusCode(StatusCodes.Status500InternalServerError, response);

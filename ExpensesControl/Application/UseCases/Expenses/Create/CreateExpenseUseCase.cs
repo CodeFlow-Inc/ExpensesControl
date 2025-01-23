@@ -2,7 +2,6 @@
 using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Response;
 using ExpensesControl.Domain.Entities.AggregateRoot;
-using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using FluentValidation;
 using Mapster;
@@ -34,7 +33,6 @@ namespace ExpensesControl.Application.UseCases.Expenses.Create
             using (LogContext.Push(
                         new PropertyEnricher("UserCode", request.UserCode)))
             {
-                throw new Exception("Teste");
                 logger.LogDebug("Starting the process of creating a new expense.");
                 var response = new CreateExpenseResponse();
 

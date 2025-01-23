@@ -1,6 +1,4 @@
-﻿using ExpensesControl.Domain.Entities.Base;
-
-namespace ExpensesControl.Domain.Entities.Tracking;
+﻿namespace ExpensesControl.Domain.Entities.Tracking;
 
 /// <summary>
 /// Represents a record of a failed command execution.
