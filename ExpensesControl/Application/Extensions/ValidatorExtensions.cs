@@ -21,7 +21,7 @@ public static class ValidatorExtensions
 
         if (!validationResult.IsValid)
         {
-            logger.LogWarning("Validation failed. Errors: {ValidationErrors}", string.Join(", ", response.ErrorMessages));
+            logger.LogWarning("Validation failed. Errors: {@Errors}", validationResult.Errors);
             response.AddErrorMessages<BaseResponse>(validationResult.Errors.Select(e => e.ErrorMessage).ToArray());
             return false;
         }
