@@ -3,6 +3,7 @@
 public interface IResultResponse<T>
 {
     public T? Result { get; set; }
+    public bool IsSuccess { get; }
 
     /// <summary>
     /// Sets the result of the use case.

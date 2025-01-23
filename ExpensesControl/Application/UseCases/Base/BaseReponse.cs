@@ -16,12 +16,12 @@ public abstract class BaseResponse
     /// <summary>
     /// Read-only collection of error messages.
     /// </summary>
-    public IReadOnlyCollection<string> ErrorMessages => _errorMessages.AsReadOnly();
+    public IReadOnlyCollection<string>? ErrorMessages => _errorMessages.Count == 0 ? null : _errorMessages.AsReadOnly();
 
     /// <summary>
     /// Indicates if the response is valid, meaning there are no error messages.
     /// </summary>
-    public bool IsValid => _errorMessages.Count == 0;
+    public bool IsSuccess => _errorMessages.Count == 0;
 
     /// <summary>
     /// Gets or sets the trace identifier for the request, used for tracking and correlation purposes.
