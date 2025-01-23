@@ -22,11 +22,6 @@ public class Expense : BaseEntity<int>
     public string? Description { get; set; }
 
     /// <summary>
-    /// Value or amount of the expense.
-    /// </summary>
-    public decimal Value { get; set; }
-
-    /// <summary>
     /// Start date when the expense was incurred.
     /// </summary>
     public DateOnly StartDate { get; set; }
@@ -49,9 +44,9 @@ public class Expense : BaseEntity<int>
     public Recurrence Recurrence { get; set; } = new Recurrence();
 
     /// <summary>
-    /// Payment method used for the expense.
+    /// Payment for the expense.
     /// </summary>
-    public PaymentMethod PaymentMethod { get; set; } = new PaymentMethod();
+    public Payment Payment { get; set; } = new Payment();
 
     /// <summary>
     /// Additional notes or details about the expense.
@@ -59,28 +54,30 @@ public class Expense : BaseEntity<int>
     public string? Notes { get; set; }
 
     /// <summary>
-    /// Validates the consistency of the expense data.
+    /// Validates the consistency of expense data by checking specific business rules.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown when validation fails.</exception>
-    public void Validate()
+    /// <param name="errors">
+    /// A list of error messages returned if any validation rule is violated.
+    /// </param>
+    /// <returns>
+    /// Returns <c>true</c> if the validation passes without errors; otherwise, <c>false</c>.
+    /// </returns>
+    public bool Validate(out List<string> errors)
     {
-        if (Value <= 0)
-        {
-            throw new InvalidOperationException("O valor deve ser maior que zero.");
-        }
+        errors = [];
 
         if (Recurrence.IsRecurring)
         {
             if (EndDate.HasValue && EndDate < StartDate)
             {
-                throw new InvalidOperationException("A data final não pode ser anterior à data inicial.");
+                errors.Add("A data final não pode ser anterior à data inicial.");
             }
         }
         else
         {
             if (EndDate.HasValue && EndDate != StartDate)
             {
-                throw new InvalidOperationException("Para despesas não recorrentes, a data final deve ser igual à data inicial.");
+                errors.Add("Para despesas não recorrentes, a data final deve ser igual à data inicial.");
             }
 
             EndDate = StartDate;
@@ -88,9 +85,15 @@ public class Expense : BaseEntity<int>
 
         if (UserCode <= 0)
         {
-            throw new InvalidOperationException("O código do usuário deve ser um número inteiro positivo.");
+            errors.Add("O código do usuário deve ser um número inteiro positivo.");
         }
-        Recurrence.Validate();
-        PaymentMethod.Validate(Value);
+
+        if(!Recurrence.Validate(out var errorsRecurrence)) 
+            errors.AddRange(errorsRecurrence);
+
+        if (!Payment.Validate(out var errorsPaymentMethod)) 
+            errors.AddRange(errorsPaymentMethod);
+
+        return errors.Count == 0;
     }
 }

@@ -1,5 +1,6 @@
 using ExpensesControl.Domain.Entities.AggregateRoot;
 using ExpensesControl.Infrastructure.SqlServer.Persistence;
+using ExpensesControl.Infrastructure.SqlServer.Repositories.Base;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using Microsoft.Extensions.Logging;
 
