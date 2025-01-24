@@ -1,8 +1,8 @@
 ﻿using ExpensesControl.Domain.Enums;
 
-namespace ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
+namespace ExpensesControl.Application.UseCases.Base.Expense;
 
-public record CreateExpenseRecurrenceRequest(
+public record RecurrenceResponse(
     bool IsRecurring,
     RecurrencePeriodicity Periodicity,
     int? MaxOccurrences);

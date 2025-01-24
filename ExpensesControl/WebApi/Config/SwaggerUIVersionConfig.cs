@@ -14,7 +14,7 @@ namespace ExpensesControl.WebApi.Config
         /// <param name="options">The Swagger UI options to configure.</param>
         public void Configure(SwaggerUIOptions options)
         {
-            // Configure dynamic version handling in Swagger UI
+            // Register dynamic version handling in Swagger UI
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "ExpensesControl API v1");
 
             // Additional Swagger UI settings

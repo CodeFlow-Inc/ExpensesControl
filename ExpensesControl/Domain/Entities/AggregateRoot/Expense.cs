@@ -88,10 +88,10 @@ public class Expense : BaseEntity<int>
             errors.Add("O código do usuário deve ser um número inteiro positivo.");
         }
 
-        if(!Recurrence.Validate(out var errorsRecurrence)) 
+        if (!Recurrence.Validate(out var errorsRecurrence))
             errors.AddRange(errorsRecurrence);
 
-        if (!Payment.Validate(out var errorsPaymentMethod)) 
+        if (!Payment.Validate(out var errorsPaymentMethod))
             errors.AddRange(errorsPaymentMethod);
 
         return errors.Count == 0;

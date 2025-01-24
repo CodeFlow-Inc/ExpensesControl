@@ -25,7 +25,7 @@ namespace ExpensesControl.WebApi.Config
         /// <param name="services">The service collection.</param>
         public static void UpdateMigrationDatabase(this IServiceCollection services)
         {
-            // Configure database migration
+            // Register database migration
             using var scope = services.BuildServiceProvider().CreateScope();
             using var dbContext = scope.ServiceProvider.GetRequiredService<SqlContext>();
             if (dbContext.Database.GetPendingMigrations().Any())

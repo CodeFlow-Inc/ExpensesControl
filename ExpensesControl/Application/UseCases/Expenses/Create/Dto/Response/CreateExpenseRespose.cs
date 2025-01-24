@@ -21,8 +21,3 @@ public class CreateExpenseResponse : BaseResponse, IResultResponse<CreateRespons
         Result = result;
     }
 }
-
-public class CreateResponse(int id)
-{
-    public int Id { get; set; } = id;
-}
