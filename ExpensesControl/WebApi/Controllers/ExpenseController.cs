@@ -29,9 +29,9 @@ public class ExpenseController(IMediator mediator) : ControllerBase
     {
         var response = await mediator.Send(request);
 
-        if (response.IsSuccess) return Ok(response);
         if (!response.IsSuccess && response.ErrorType == ErrorType.BusinessRuleError)
             return BadRequest(response);
+        if (response.IsSuccess) return Ok(response);
         return StatusCode(StatusCodes.Status500InternalServerError, response);
     }
 
@@ -40,7 +40,7 @@ public class ExpenseController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <param name="userCode">The user code to search expenses for.</param>
     /// <returns>Returns the list of expenses for the given user code.</returns>
-    [HttpGet("{userCode}")]
+    [HttpGet("/user/{userCode}")]
     [SwaggerOperation(
         Summary = "Get expenses by user code",
         Description = "Fetches expenses for the given user code.")]
@@ -53,12 +53,12 @@ public class ExpenseController(IMediator mediator) : ControllerBase
 
         var response = await mediator.Send(request);
 
-        if (response.IsSuccess && !response.Result.Any())
+        if (!response.IsSuccess && response.ErrorType == ErrorType.BusinessRuleError)
+            return BadRequest(response);
+        if (response.IsSuccess && (response.Result == null || !response.Result.Any()))
             return NoContent();
         if (response.IsSuccess && response.Result != null && response.Result.Any())
             return Ok(response);
-        if (!response.IsSuccess && response.ErrorType == ErrorType.BusinessRuleError)
-            return BadRequest(response);
         return StatusCode(StatusCodes.Status500InternalServerError, response);
     }
 }
