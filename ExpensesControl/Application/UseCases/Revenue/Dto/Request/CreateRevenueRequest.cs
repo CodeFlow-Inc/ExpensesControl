@@ -10,7 +10,7 @@ namespace ExpensesControl.Application.UseCases.Revenue.Dto.Request
         public string? Description { get; set; }
         public decimal Amount { get; set; }
         public DateOnly ReceiptDate { get; set; }
-        public TypeIncome Type { get; set; }
+        public TypeRevenue Type { get; set; }
         public CreateRevenueRecurrenceRequest Recurrence { get; set; } = new CreateRevenueRecurrenceRequest();
     }
 }

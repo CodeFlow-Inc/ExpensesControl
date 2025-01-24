@@ -3,9 +3,9 @@
 namespace ExpensesControl.Domain.Enums
 {
     /// <summary>
-    /// Represents the type of income.
+    /// Represents the type of revenue.
     /// </summary>
-    public enum TypeIncome
+    public enum TypeRevenue
     {
         /// <summary>
         /// Salary.
@@ -32,9 +32,17 @@ namespace ExpensesControl.Domain.Enums
         Bonus = 40,
 
         /// <summary>
-        /// Other types of income.
+        /// Transfer types of revenue.
+        /// </summary>
+        [Description("Transferência")]
+        Transfer = 50,
+
+        /// <summary>
+        /// Other types of revenue.
         /// </summary>
         [Description("Outros")]
-        Others = 50
+        Others = 60,
+
+   
     }
 }

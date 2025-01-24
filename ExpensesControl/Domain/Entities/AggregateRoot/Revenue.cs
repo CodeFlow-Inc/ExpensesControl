@@ -34,7 +34,7 @@ namespace ExpensesControl.Domain.Entities.AggregateRoot
         /// <summary>
         /// Type of the Revenue
         /// </summary>
-        public TypeIncome Type { get; set; }
+        public TypeRevenue Type { get; set; }
 
         /// <summary>
         /// Recurrence of Revenue
