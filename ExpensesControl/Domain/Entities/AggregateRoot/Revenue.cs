@@ -6,9 +6,9 @@ using ExpensesControl.Domain.Enums;
 namespace ExpensesControl.Domain.Entities.AggregateRoot
 {
     /// <summary>
-    /// Represents an Income entry.
+    /// Represents an Revenue entry.
     /// </summary>
-    public class Income : BaseEntity<int>
+    public class Revenue : BaseEntity<int>
     {
         /// <summary>
         /// User code associated with the expense.
@@ -17,42 +17,48 @@ namespace ExpensesControl.Domain.Entities.AggregateRoot
         public int UserCode { get; set; }
 
         /// <summary>
-        /// Description of the Income.
+        /// Description of the Revenue3
         /// </summary>
         public string? Description { get; set; }
 
         /// <summary>
-        /// Amount of the Income
+        /// Amount of the Revenue
         /// </summary>
         public decimal Amount { get; set; }
 
         /// <summary>
-        /// Date of the Income
+        /// Date of the Revenue
         /// </summary>
         public DateOnly ReceiptDate { get; set; }
 
         /// <summary>
-        /// Type of the Income
+        /// Type of the Revenue
         /// </summary>
         public TypeIncome Type { get; set; }
 
-        public void Validate()
+        /// <summary>
+        /// Recurrence of Revenue
+        /// </summary>
+        public Recurrence Recurrence { get; set; } = new Recurrence();
+
+        public bool Validate(out List<string> errors)
         {
+            errors = [];
+
             if (Amount <= 0)
             {
-                throw new InvalidOperationException("O valor deve ser maior que zero.");
+                errors.Add("O valor deve ser maior que zero.");
             }
 
             if (UserCode <= 0)
             {
-                throw new InvalidOperationException("O código do usuário deve ser um número inteiro positivo.");
+                errors.Add("O código do usuário deve ser um número inteiro positivo.");
             }
 
-            var recurrence = new Recurrence();
-            recurrence.Validate();
+            if (!Recurrence.Validate(out var errorsRecurrence))
+                errors.AddRange(errorsRecurrence);
 
-            var paymentMethod = new PaymentMethod();
-            paymentMethod.Validate(Amount);
+            return errors.Count == 0;
         }
     }
 }
