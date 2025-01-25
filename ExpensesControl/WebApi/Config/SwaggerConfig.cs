@@ -1,6 +1,5 @@
 ﻿using ExpensesControl.WebApi.Config.Filters;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace ExpensesControl.WebApi.Config

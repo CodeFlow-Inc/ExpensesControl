@@ -1,6 +1,6 @@
 ﻿using ExpensesControl.Application.UseCases.Base;
 using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
-using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Response;
+using ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Request;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -29,11 +29,36 @@ public class ExpenseController(IMediator mediator) : ControllerBase
     {
         var response = await mediator.Send(request);
 
+        if (!response.IsSuccess && response.ErrorType == ErrorType.BusinessRuleError)
+            return BadRequest(response);
         if (response.IsSuccess) return Ok(response);
+        return StatusCode(StatusCodes.Status500InternalServerError, response);
+    }
+
+    /// <summary>
+    /// Gets expenses by user.
+    /// </summary>
+    /// <param name="userCode">The user code to search expenses for.</param>
+    /// <returns>Returns the list of expenses for the given user code.</returns>
+    [HttpGet("/user/{userCode}")]
+    [SwaggerOperation(
+        Summary = "Get expenses by user code",
+        Description = "Fetches expenses for the given user code.")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Expenses retrieved successfully", typeof(GetExpensesByUserCodeRequest))]
+    [SwaggerResponse(StatusCodes.Status204NoContent, "No expenses found for the given user code", null)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid user code", typeof(BaseResponse))]
+    public async Task<IActionResult> GetExpensesByUser(int userCode)
+    {
+        var request = new GetExpensesByUserCodeRequest(default) { UserCode = userCode };
+
+        var response = await mediator.Send(request);
 
         if (!response.IsSuccess && response.ErrorType == ErrorType.BusinessRuleError)
             return BadRequest(response);
-        else
-            return StatusCode(StatusCodes.Status500InternalServerError, response);
+        if (response.IsSuccess && (response.Result == null || !response.Result.Any()))
+            return NoContent();
+        if (response.IsSuccess && response.Result != null && response.Result.Any())
+            return Ok(response);
+        return StatusCode(StatusCodes.Status500InternalServerError, response);
     }
 }

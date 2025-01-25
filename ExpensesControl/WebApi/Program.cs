@@ -1,4 +1,5 @@
 using Destructurama;
+using ExpensesControl.Application.Config;
 using ExpensesControl.Domain.Enums;
 using ExpensesControl.WebApi.Config;
 using ExpensesControl.WebApi.Extensions;
