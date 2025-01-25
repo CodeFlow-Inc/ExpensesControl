@@ -22,8 +22,8 @@ jobs:
       shell: bash
       run: |
         dotnet nuget add source \
-          --username CodeFlow-Inc \
-          --password 123123 \
+          --username ${{ github.actor }} \
+          --password ${{ secrets.GITHUB_TOKEN }} \
           --store-password-in-clear-text \
           --name github \
           "https://nuget.pkg.github.com/CodeFlow-Inc/index.json"
