@@ -1,4 +1,5 @@
-﻿using ExpensesControl.Application.UseCases.Base;
+﻿using CodeFlow.Start.Lib.WebTransfer.Base;
+using CodeFlow.Start.Lib.WebTransfer.Base.Response;
 using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Request;
 using MediatR;

@@ -1,11 +1,11 @@
 ﻿using CodeFlow.Start.Lib.WebTransfer.Base.Response;
 
-namespace ExpensesControl.Application.UseCases.Expenses.Create.Dto.Response;
+namespace ExpensesControl.Application.UseCases.Revenue.Create.Dto.Response;
 
 /// <summary>
-/// Response after creating an expense.
+/// Response after creating an revenue.
 /// </summary>
-public class CreateExpenseResponse : BaseResponse, IResultResponse<CreateResponse>
+public class CreateRevenueResponse : BaseResponse, IResultResponse<CreateResponse>
 {
     /// <summary>
     /// The response value of the use case.

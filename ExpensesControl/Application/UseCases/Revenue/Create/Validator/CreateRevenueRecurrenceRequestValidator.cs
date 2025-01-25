@@ -1,7 +1,7 @@
-﻿using ExpensesControl.Application.UseCases.Revenue.Dto.Request;
+﻿using ExpensesControl.Application.UseCases.Revenue.Create.Dto.Request;
 using FluentValidation;
 
-namespace ExpensesControl.Application.UseCases.Revenue.Validator
+namespace ExpensesControl.Application.UseCases.Revenue.Create.Validator
 {
     public class CreateRevenueRecurrenceRequestValidator : AbstractValidator<CreateRevenueRecurrenceRequest>
     {

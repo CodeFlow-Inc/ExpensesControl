@@ -1,12 +1,12 @@
+using CodeFlow.Start.Lib.Config;
+using CodeFlow.Start.Lib.Extensions;
 using Destructurama;
-using ExpensesControl.Application.Config;
 using ExpensesControl.Domain.Enums;
 using ExpensesControl.WebApi.Config;
-using ExpensesControl.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Text.Json.Serialization;
-using static ExpensesControl.Application.Extensions.EnumExtensions;
+using static CodeFlow.Start.Lib.Extensions.EnumExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
