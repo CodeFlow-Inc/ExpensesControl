@@ -10,65 +10,64 @@ using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using Serilog.Core.Enrichers;
 
-namespace ExpensesControl.Application.UseCases.Expenses.Create
+namespace ExpensesControl.Application.UseCases.Expenses.Create;
+
+/// <summary>
+/// Handles the creation of a new expense.
+/// </summary>
+/// <param name="expenseRepository">The repository for managing expenses.</param>
+/// <param name="logger">The logger for logging information and errors.</param>
+public class CreateExpenseUseCase(
+    IUnitOfWork unitOfWork,
+    IValidator<CreateExpenseRequest> validator,
+    ILogger<CreateExpenseUseCase> logger) : IRequestHandler<CreateExpenseRequest, CreateExpenseResponse>
 {
     /// <summary>
     /// Handles the creation of a new expense.
     /// </summary>
-    /// <param name="expenseRepository">The repository for managing expenses.</param>
-    /// <param name="logger">The logger for logging information and errors.</param>
-    public class CreateExpenseUseCase(
-        IUnitOfWork unitOfWork,
-        IValidator<CreateExpenseRequest> validator,
-        ILogger<CreateExpenseUseCase> logger) : IRequestHandler<CreateExpenseRequest, CreateExpenseResponse>
+    /// <param name="request">The request data for creating the expense.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>An response object containing the result of the expense creation process.</returns>
+    public async Task<CreateExpenseResponse> Handle(CreateExpenseRequest request, CancellationToken cancellationToken)
     {
-        /// <summary>
-        /// Handles the creation of a new expense.
-        /// </summary>
-        /// <param name="request">The request data for creating the expense.</param>
-        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-        /// <returns>An response object containing the result of the expense creation process.</returns>
-        public async Task<CreateExpenseResponse> Handle(CreateExpenseRequest request, CancellationToken cancellationToken)
+        using (LogContext.Push(
+                    new PropertyEnricher("UserCode", request.UserCode)))
         {
-            using (LogContext.Push(
-                        new PropertyEnricher("UserCode", request.UserCode)))
+            logger.LogDebug("Starting the process of creating a new expense.");
+            var response = new CreateExpenseResponse();
+
+            if (!await validator.ValidateAndAddErrorsAsync(request, logger, response, cancellationToken))
+                return response;
+
+            var expense = request.Adapt<Expense>();
+            try
             {
-                logger.LogDebug("Starting the process of creating a new expense.");
-                var response = new CreateExpenseResponse();
+                expense.SetCurrentUser(request.UserCode.ToString());
 
-                if (!await validator.ValidateAndAddErrorsAsync(request, logger, response, cancellationToken))
-                    return response;
-
-                var expense = request.Adapt<Expense>();
-                try
+                #region TRANSACTION
+                await unitOfWork.BeginTransactionAsync(cancellationToken);
+                var createdExpense = await unitOfWork.ExpenseRepository.CreateAsync(expense, cancellationToken);
+                if (!createdExpense.Validate(out var domainErrors))
                 {
-                    expense.SetCurrentUser(request.UserCode.ToString());
-
-                    #region TRANSACTION
-                    await unitOfWork.BeginTransactionAsync(cancellationToken);
-                    var createdExpense = await unitOfWork.ExpenseRepository.CreateAsync(expense, cancellationToken);
-                    if (!createdExpense.Validate(out var domainErrors))
-                    {
-                        logger.LogWarning("Failed to validate domain.");
-                        return response.AddErrorMessages<CreateExpenseResponse>(domainErrors);
-                    }
-                    await unitOfWork.CommitAsync(cancellationToken);
-                    logger.LogInformation("Expense successfully created. ID: {ExpenseId}", createdExpense.Id);
-                    #endregion
-
-                    response.SetResult(new(createdExpense.Id));
-                    return response;
+                    logger.LogWarning("Failed to validate domain.");
+                    return response.AddErrorMessages<CreateExpenseResponse>(domainErrors);
                 }
-                catch (Exception expectedError) when
-                (
-                    expectedError is InvalidOperationException ||
-                    expectedError is KeyNotFoundException
-                )
-                {
-                    await unitOfWork.RollbackAsync();
-                    logger.LogWarning("Expected error occurred: {ErrorMessage}", expectedError.Message);
-                    return response.AddErrorMessage<CreateExpenseResponse>(expectedError.Message);
-                }
+                await unitOfWork.CommitAsync(cancellationToken);
+                logger.LogInformation("Expense successfully created. ID: {ExpenseId}", createdExpense.Id);
+                #endregion
+
+                response.SetResult(new(createdExpense.Id));
+                return response;
+            }
+            catch (Exception expectedError) when
+            (
+                expectedError is InvalidOperationException ||
+                expectedError is KeyNotFoundException
+            )
+            {
+                await unitOfWork.RollbackAsync();
+                logger.LogWarning("Expected error occurred: {ErrorMessage}", expectedError.Message);
+                return response.AddErrorMessage<CreateExpenseResponse>(expectedError.Message);
             }
         }
     }

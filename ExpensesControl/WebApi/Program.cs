@@ -2,6 +2,7 @@ using CodeFlow.Start.Lib.Config;
 using CodeFlow.Start.Lib.Extensions;
 using Destructurama;
 using ExpensesControl.Domain.Enums;
+using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using ExpensesControl.WebApi.Config;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -26,8 +27,8 @@ Log.Information("Starting up");
 // =====================================
 
 string? sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.ConfigureDatabaseSqlServer(sqlConnection!);
-builder.Services.UpdateMigrationDatabase();
+builder.Services.ConfigureDatabaseSqlServer<SqlContext>(sqlConnection!);
+builder.Services.UpdateMigrationDatabase<SqlContext>();
 
 builder.Services.AddDependencyInjection();
 
