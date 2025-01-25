@@ -1,12 +1,13 @@
-﻿using ExpensesControl.Application.UseCases.Base;
-using ExpensesControl.Domain.Entities.Tracking;
+﻿using CodeFlow.Start.Lib.Context.Tracking;
+using CodeFlow.Start.Lib.WebTransfer.Base;
+using CodeFlow.Start.Lib.WebTransfer.Base.Response;
 using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
-namespace ExpensesControl.Application.UseCases;
+namespace ExpensesControl.Application.Behavior;
 
 public class CommandFailureBehavior<TRequest, TResponse>(ILogger<CommandFailureBehavior<TRequest, TResponse>> logger, SqlContext dbContext, IConfiguration config) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull

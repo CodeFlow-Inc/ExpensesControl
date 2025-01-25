@@ -1,4 +1,4 @@
-﻿using ExpensesControl.Domain.Entities.Base;
+﻿using CodeFlow.Start.Lib.Context.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

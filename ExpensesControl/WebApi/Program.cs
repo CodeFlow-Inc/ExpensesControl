@@ -1,12 +1,13 @@
+using CodeFlow.Start.Lib.Config;
+using CodeFlow.Start.Lib.Extensions;
 using Destructurama;
-using ExpensesControl.Application.Config;
 using ExpensesControl.Domain.Enums;
+using ExpensesControl.Infrastructure.SqlServer.Persistence;
 using ExpensesControl.WebApi.Config;
-using ExpensesControl.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Text.Json.Serialization;
-using static ExpensesControl.Application.Extensions.EnumExtensions;
+using static CodeFlow.Start.Lib.Extensions.EnumExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,8 +27,8 @@ Log.Information("Starting up");
 // =====================================
 
 string? sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.ConfigureDatabaseSqlServer(sqlConnection!);
-builder.Services.UpdateMigrationDatabase();
+builder.Services.ConfigureDatabaseSqlServer<SqlContext>(sqlConnection!);
+builder.Services.UpdateMigrationDatabase<SqlContext>();
 
 builder.Services.AddDependencyInjection();
 

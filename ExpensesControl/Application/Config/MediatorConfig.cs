@@ -1,4 +1,4 @@
-﻿using ExpensesControl.Application.UseCases;
+﻿using ExpensesControl.Application.Behavior;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
