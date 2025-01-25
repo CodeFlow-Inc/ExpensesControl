@@ -10,12 +10,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
+
     - uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Configure NuGet
+
+    - name: Add NuGet Source
+      shell: bash
       run: |
         dotnet nuget add source \
           --username CodeFlow-Inc \
@@ -24,9 +28,12 @@ jobs:
           --name github \
           "https://nuget.pkg.github.com/CodeFlow-Inc/index.json"
         dotnet nuget update source github
+
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build
       run: dotnet build --no-restore
+      
     - name: Test
       run: dotnet test --no-build --verbosity normal
