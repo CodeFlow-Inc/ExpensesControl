@@ -1,6 +1,6 @@
-﻿using ExpensesControl.Application.Extensions;
-using ExpensesControl.Application.UseCases.Revenue.Dto.Request;
-using ExpensesControl.Application.UseCases.Revenue.Dto.Response;
+﻿using CodeFlow.Start.Lib.Extensions;
+using ExpensesControl.Application.UseCases.Revenue.Create.Dto.Request;
+using ExpensesControl.Application.UseCases.Revenue.Create.Dto.Response;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using FluentValidation;
 using Mapster;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using Serilog.Core.Enrichers;
 
-namespace ExpensesControl.Application.UseCases.Revenue
+namespace ExpensesControl.Application.UseCases.Revenue.Create
 {   /// <summary>
     /// Handles the creation of a new revenue.
     /// </summary>

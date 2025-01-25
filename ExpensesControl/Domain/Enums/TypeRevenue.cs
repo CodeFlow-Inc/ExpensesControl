@@ -43,6 +43,6 @@ namespace ExpensesControl.Domain.Enums
         [Description("Outros")]
         Others = 60,
 
-   
+
     }
 }
