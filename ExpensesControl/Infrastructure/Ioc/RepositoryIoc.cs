@@ -18,6 +18,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Ioc
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            services.AddScoped<IRevenueRepository, RevenueRepositoryy>();
             return services;
         }
     }

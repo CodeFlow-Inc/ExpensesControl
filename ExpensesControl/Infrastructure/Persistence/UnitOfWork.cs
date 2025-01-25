@@ -8,9 +8,10 @@ namespace ExpensesControl.Infrastructure.SqlServer.Persistence
     /// <summary>
     /// Implements the Unit of Work pattern to manage transactions and database changes.
     /// </summary>
-    public class UnitOfWork(SqlContext context, IExpenseRepository expenseRepository) : IUnitOfWork, IDisposable
+    public class UnitOfWork(SqlContext context, IExpenseRepository expenseRepository, IRevenueRepository revenueRepository) : IUnitOfWork, IDisposable
     {
         public IExpenseRepository ExpenseRepository { get; } = expenseRepository;
+        public IRevenueRepository RevenueRepository { get; } = revenueRepository;
         private IDbContextTransaction? _currentTransaction;
         private bool _disposed;
 
