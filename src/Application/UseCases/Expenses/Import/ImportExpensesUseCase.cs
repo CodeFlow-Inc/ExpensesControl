@@ -1,7 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using ExpensesControl.Application.UseCases.Base.Records.Expense;
-using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Response;
+using ExpensesControl.Application.UseCases.Base.Response;
 using ExpensesControl.Application.UseCases.Expenses.Import.Dto.Map;
 using ExpensesControl.Application.UseCases.Expenses.Import.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.Import.Dto.Response;
@@ -11,8 +11,20 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 
 namespace ExpensesControl.Application.UseCases.Expenses.Import;
+
+/// <summary>
+/// Use case for importing expenses from a CSV file.s
+/// </summary>
+/// <param name="unitOfWork"></param>
+/// <param name="logger"></param>
 public class ImportExpensesUseCase(IUnitOfWork unitOfWork, ILogger<ImportExpensesUseCase> logger) : IRequestHandler<ImportExpensesRequest, ImportExpensesResponse>
 {
+	/// <summary>
+	/// Handles the process of importing expenses from a CSV file.
+	/// </summary>
+	/// <param name="request"></param>
+	/// <param name="cancellationToken"></param>
+	/// <returns></returns>
 	public async Task<ImportExpensesResponse> Handle(ImportExpensesRequest request, CancellationToken cancellationToken)
 	{
 		var response = new ImportExpensesResponse();
@@ -23,12 +35,11 @@ public class ImportExpensesUseCase(IUnitOfWork unitOfWork, ILogger<ImportExpense
 		{
 			csv.Context.RegisterClassMap<ExpenseRecordMap>();
 			var records = csv.GetRecords<ExpenseRecord>().ToList();
+			await unitOfWork.BeginTransactionAsync(cancellationToken);
 			foreach (var record in records)
 			{
 				try
 				{
-					#region TRANSACTION
-					await unitOfWork.BeginTransactionAsync(cancellationToken);
 					var createdExpense = await unitOfWork.ExpenseRepository.CreateAsync(
 						new(
 							request.UserCode,
@@ -43,16 +54,15 @@ public class ImportExpensesUseCase(IUnitOfWork unitOfWork, ILogger<ImportExpense
 							record.Payment.Type,
 							record.Payment.IsInstallment,
 							record.Payment.InstallmentCount
-						)
-						, cancellationToken);
+						), cancellationToken);
 					if (!createdExpense.Validate(out var domainErrors))
 					{
 						logger.LogWarning("Failed to validate domain.");
-						return response.AddErrorMessages<CreateExpenseResponse>(domainErrors);
+						result.Errors.Add($"Error processing record {record}: {domainErrors}");
+						result.FailedRecords++;
+						continue;
 					}
-					await unitOfWork.CommitAsync(cancellationToken);
-					logger.LogInformation("Expense successfully created. ID: {ExpenseId}", createdExpense.Id);
-					#endregion					result.SuccessfulRecords++;
+					result.SuccessfulRecords++;
 				}
 				catch (Exception ex)
 				{
@@ -60,8 +70,11 @@ public class ImportExpensesUseCase(IUnitOfWork unitOfWork, ILogger<ImportExpense
 					result.Errors.Add($"Error processing record {record}: {ex.Message}");
 				}
 			}
-
 			result.TotalRecords = records.Count;
+
+			await unitOfWork.CommitAsync(cancellationToken);
+			logger.LogInformation("Process import has completed.");
+
 			response.SetResult(result);
 		}
 

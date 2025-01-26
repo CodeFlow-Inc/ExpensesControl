@@ -1,5 +1,6 @@
 ﻿using CodeFlow.Start.Lib.Extensions;
 using ExpensesControl.Application.Specs;
+using ExpensesControl.Application.UseCases.Base.Records.Expense;
 using ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Response;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
