@@ -7,6 +7,30 @@ namespace ExpensesControl.Domain.Entities.ValueObjects;
 /// </summary>
 public class Recurrence
 {
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Recurrence"/> class.
+	/// </summary>
+	public Recurrence()
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Recurrence"/> class.
+	/// </summary>
+	/// <param name="isRecurring"></param>
+	/// <param name="periodicity"></param>
+	/// <param name="maxOccurrences"></param>
+	public Recurrence(
+		bool isRecurring,
+		RecurrencePeriodicity periodicity,
+		int? maxOccurrences)
+	{
+		this.IsRecurring = isRecurring;
+		this.Periodicity = periodicity;
+		this.MaxOccurrences = maxOccurrences;
+	}
+
 	/// <summary>
 	/// Indicates whether the expense is recurring.
 	/// </summary>

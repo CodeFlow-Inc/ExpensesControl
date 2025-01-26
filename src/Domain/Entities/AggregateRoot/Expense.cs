@@ -11,6 +11,51 @@ namespace ExpensesControl.Domain.Entities.AggregateRoot;
 public class Expense : BaseEntity<int>
 {
 	/// <summary>
+	/// Initializes a new instance of the <see cref="Expense"/> class.
+	/// </summary>
+	public Expense()
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Expense"/> class.
+	/// </summary>
+	/// <param name="userCode"></param>
+	/// <param name="description"></param>
+	/// <param name="startDate"></param>
+	/// <param name="endDate"></param>
+	/// <param name="category"></param>
+	/// <param name="isRecurring"></param>
+	/// <param name="periodicity"></param>
+	/// <param name="maxOccurrences"></param>
+	/// <param name="totalValue"></param>
+	/// <param name="type"></param>
+	/// <param name="isInstallment"></param>
+	/// <param name="installmentCount"></param>
+	public Expense(
+		int userCode,
+		string? description,
+		DateOnly startDate,
+		DateOnly? endDate,
+		ExpenseCategory category,
+		bool isRecurring,
+		RecurrencePeriodicity periodicity,
+		int? maxOccurrences,
+		decimal totalValue,
+		PaymentType type,
+		bool isInstallment = false,
+		int? installmentCount = null)
+	{
+		this.UserCode = userCode;
+		this.Description = description;
+		this.StartDate = startDate;
+		this.EndDate = endDate;
+		this.Category = category;
+		this.Recurrence = new(isRecurring, periodicity, maxOccurrences);
+		this.Payment = new(totalValue, type, isInstallment, installmentCount);
+	}
+
+	/// <summary>
 	/// User code associated with the expense.
 	/// </summary>
 	[LogMasked]

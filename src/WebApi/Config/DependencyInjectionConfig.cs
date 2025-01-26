@@ -1,5 +1,7 @@
 ﻿using ExpensesControl.Application.Config;
-using ExpensesControl.Infrastructure.SqlServer.Ioc;
+using ExpensesControl.Infrastructure.SqlServer.Persistence;
+using ExpensesControl.Infrastructure.SqlServer.Repositories;
+using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 
 namespace ExpensesControl.WebApi.Config;
 
@@ -22,4 +24,17 @@ public static class DependencyInjectionConfig
 
 		return services;
 	}
+
+	/// <summary>
+	/// Configures IoC container for repository services.
+	/// </summary>
+	/// <param name="services">The service collection.</param>
+	private static IServiceCollection ConfigureRepositoryIoc(this IServiceCollection services)
+	{
+		services.AddScoped<IUnitOfWork, UnitOfWork>();
+		services.AddScoped<IExpenseRepository, ExpenseRepository>();
+		services.AddScoped<IRevenueRepository, RevenueRepository>();
+		return services;
+	}
+
 }

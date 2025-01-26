@@ -62,4 +62,30 @@ public class ExpenseController(IMediator mediator) : ControllerBase
 			return Ok(response);
 		return StatusCode(StatusCodes.Status500InternalServerError, response);
 	}
+
+	/// <summary>
+	/// Imports expenses from a CSV file.
+	/// </summary>
+	/// <param name="file">The CSV file containing expense records.</param>
+	/// <returns>Returns the result of the import process.</returns>
+	[HttpPost("ImportExpenses")]
+	[SwaggerOperation(
+		Summary = "Import expenses from a CSV file",
+		Description = "Imports expense records from the provided CSV file.")]
+	[SwaggerResponse(StatusCodes.Status200OK, "Expenses imported successfully", typeof(ImportExpensesResponse))]
+	[SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid file format or contents", typeof(BaseResponse))]
+	[SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal error", typeof(BaseResponse))]
+	public async Task<IActionResult> ImportExpenses(IFormFile file)
+	{
+
+		var request = new ImportExpensesRequest(file);
+		var response = await mediator.Send(request);
+
+		if (response.IsSuccess)
+		{
+			return Ok(response);
+		}
+
+		return StatusCode(StatusCodes.Status500InternalServerError, response);
+	}
 }

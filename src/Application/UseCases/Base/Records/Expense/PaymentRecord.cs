@@ -1,8 +1,8 @@
 ﻿using ExpensesControl.Domain.Enums;
 
-namespace ExpensesControl.Application.UseCases.Base.Expense;
+namespace ExpensesControl.Application.UseCases.Base.Records.Expense;
 
-public record PaymentResponse(
+public record PaymentRecord(
 	PaymentType Type,
 	bool IsInstallment,
 	int? InstallmentCount,
