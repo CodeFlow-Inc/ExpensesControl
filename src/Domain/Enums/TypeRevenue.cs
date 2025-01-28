@@ -41,7 +41,5 @@ public enum TypeRevenue
 	/// Other types of revenue.
 	/// </summary>
 	[Description("Outros")]
-	Others = 60,
-
-
+	Others = 60
 }
