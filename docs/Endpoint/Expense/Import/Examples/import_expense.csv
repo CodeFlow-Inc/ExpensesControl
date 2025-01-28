@@ -1,4 +1,4 @@
-Data Inicio,Data Fim,Categoria,Descricao,Tipo Pagamento,Parcelado,Qtd Parcelas,Valor Total,Recorrente,Qtd Ocorrencias,Periodicidade
-2023-01-01,2023-01-31,Food,Groceries,Credit Card,Yes,3,150.00,No,0,Monthly
-2023-02-01,2023-02-28,Transport,Bus Pass,Debit Card,No,0,50.00,Yes,12,Monthly
-2023-03-01,2023-03-31,Utilities,Electricity Bill,Credit Card,No,0,100.00,No,0,Monthly
+Data Inicio;Data Fim;Categoria;Descricao;Tipo Pagamento;Parcelado;Qtd Parcelas;Valor Total;Recorrente;Qtd Ocorrencias;Periodicidade
+2023-01-01;2023-01-31;Food;Groceries;Credit Card;Yes;3;150,00;No;0;Monthly
+2023-02-01;2023-02-28;Transport;Bus Pass;Debit Card;No;0;50,00;Yes;12;Monthly
+2023-03-01;2023-03-31;Utilities;Electricity Bill;Credit Card;No;0;100,00;No;0;Monthly
