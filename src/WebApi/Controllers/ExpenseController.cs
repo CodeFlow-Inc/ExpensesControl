@@ -1,5 +1,5 @@
-﻿using CodeFlow.Start.Lib.WebTransfer.Base;
-using CodeFlow.Start.Lib.WebTransfer.Base.Response;
+﻿using CodeFlow.Start.Package.WebTransfer.Base;
+using CodeFlow.Start.Package.WebTransfer.Base.Response;
 using ExpensesControl.Application.UseCases.Expenses.Create.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.Import.Dto.Request;
@@ -33,7 +33,7 @@ public class ExpenseController(IMediator mediator) : ControllerBase
 	{
 		var response = await mediator.Send(request);
 
-		if (!response.IsSuccess && response.ErrorType == ErrorType.BusinessRuleError)
+        if (!response.IsSuccess && response.ErrorType.HasValue && response.ErrorType.Value == ErrorType.BusinessRuleError)
 			return BadRequest(response);
 		if (response.IsSuccess) return Ok(response);
 		return StatusCode(StatusCodes.Status500InternalServerError, response);

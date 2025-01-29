@@ -1,5 +1,5 @@
-using CodeFlow.Start.Lib.Config;
-using CodeFlow.Start.Lib.Extensions;
+using CodeFlow.Start.Package.Config;
+using CodeFlow.Start.Package.Extensions;
 using Destructurama;
 using ExpensesControl.Domain.Enums;
 using ExpensesControl.Infrastructure.SqlServer.Persistence;
@@ -7,7 +7,7 @@ using ExpensesControl.WebApi.Config;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Text.Json.Serialization;
-using static CodeFlow.Start.Lib.Extensions.EnumExtensions;
+using static CodeFlow.Start.Package.Extensions.EnumExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,4 +1,4 @@
-﻿using CodeFlow.Start.Lib.Extensions;
+﻿using CodeFlow.Start.Package.Extensions;
 using ExpensesControl.Application.Specs;
 using ExpensesControl.Application.UseCases.Base.Records.Expense;
 using ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Request;

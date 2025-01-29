@@ -25,7 +25,7 @@ namespace ExpensesControl.Infrastructure.SqlServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CodeFlow.Start.Lib.Context.Tracking.CommandFailure", b =>
+            modelBuilder.Entity("CodeFlow.Start.Package.Context.Tracking.CommandFailure", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,4 +1,5 @@
-﻿using ExpensesControl.Domain.Entities.AggregateRoot;
+﻿using CodeFlow.Data.Context.Package.Configuration;
+using ExpensesControl.Domain.Entities.AggregateRoot;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

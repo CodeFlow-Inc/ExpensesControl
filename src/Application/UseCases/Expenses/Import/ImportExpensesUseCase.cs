@@ -1,11 +1,11 @@
-﻿using CsvHelper;
+﻿using CodeFlow.Csv.Package.Validator;
+using CsvHelper;
 using CsvHelper.Configuration;
 using ExpensesControl.Application.UseCases.Base.Records.Expense;
 using ExpensesControl.Application.UseCases.Base.Response;
-using ExpensesControl.Application.UseCases.Expenses.Import.Dto.Map;
 using ExpensesControl.Application.UseCases.Expenses.Import.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.Import.Dto.Response;
-using ExpensesControl.Application.UseCases.Expenses.Import.Dto.Validator;
+using ExpensesControl.Application.UseCases.Expenses.Import.Map;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;

@@ -1,4 +1,4 @@
-﻿using CodeFlow.Start.Lib.WebTransfer.Base.Response;
+﻿using CodeFlow.Start.Package.WebTransfer.Base.Response;
 using ExpensesControl.Application.UseCases.Base.Records.Expense;
 
 namespace ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Response;

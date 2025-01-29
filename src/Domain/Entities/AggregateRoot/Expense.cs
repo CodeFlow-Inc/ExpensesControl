@@ -1,4 +1,4 @@
-﻿using CodeFlow.Start.Lib.Context.Base;
+﻿using CodeFlow.Data.Context.Package.Base.Entities;
 using Destructurama.Attributed;
 using ExpensesControl.Domain.Entities.ValueObjects;
 using ExpensesControl.Domain.Enums;
