@@ -1,4 +1,3 @@
-```markdown
 # Configuring GitHub as a NuGet Package Source
 
 This guide explains how to configure GitHub as a NuGet package source by modifying the `NuGet.Config` file to include your GitHub repository credentials.
@@ -94,5 +93,3 @@ Replace `<PackageName>` with the name of the package you want to install.
 
 - [GitHub Packages Documentation](https://docs.github.com/en/packages)
 - [NuGet Configuration Documentation](https://learn.microsoft.com/en-us/nuget/reference/nuget-config-file)
-
-```
