@@ -11,6 +11,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExpensesControl.WebApi.Controllers;
 
+/// <summary>
+/// Controller for expense management operations.
+/// </summary>
+/// <param name="mediator"></param>
 [ApiController]
 [ApiVersion("1")]
 [Route("api/v{version:apiVersion}/[controller]")]
@@ -33,7 +37,7 @@ public class ExpenseController(IMediator mediator) : ControllerBase
 	{
 		var response = await mediator.Send(request);
 
-        if (!response.IsSuccess && response.ErrorType.HasValue && response.ErrorType.Value == ErrorType.BusinessRuleError)
+		if (!response.IsSuccess && response.ErrorType.HasValue && response.ErrorType.Value == ErrorType.BusinessRuleError)
 			return BadRequest(response);
 		if (response.IsSuccess) return Ok(response);
 		return StatusCode(StatusCodes.Status500InternalServerError, response);

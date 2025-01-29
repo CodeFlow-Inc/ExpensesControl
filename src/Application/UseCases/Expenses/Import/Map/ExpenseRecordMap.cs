@@ -5,8 +5,14 @@ using ExpensesControl.Domain.Enums;
 
 namespace ExpensesControl.Application.UseCases.Expenses.Import.Map;
 
+/// <summary>
+/// Maps the properties of the ExpenseRecord.
+/// </summary>
 public class ExpenseRecordMap : ClassMap<ExpenseRecord>
 {
+	/// <summary>
+	/// Maps the properties of the ExpenseRecord.
+	/// </summary>
 	public ExpenseRecordMap()
 	{
 		Map(m => m.StartDate).Name("Data Inicio");

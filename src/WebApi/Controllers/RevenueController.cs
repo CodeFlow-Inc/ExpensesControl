@@ -7,6 +7,10 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ExpensesControl.WebApi.Controllers;
 
+/// <summary>
+/// Controller for revenue management operations.
+/// </summary>
+/// <param name="mediator"></param>
 [ApiController]
 [ApiVersion("1")]
 [Route("api/v{version:apiVersion}/[controller]")]
