@@ -1,5 +1,5 @@
-﻿using CodeFlow.Start.Lib.WebTransfer.Base;
-using CodeFlow.Start.Lib.WebTransfer.Base.Response;
+﻿using CodeFlow.Start.Package.WebTransfer.Base;
+using CodeFlow.Start.Package.WebTransfer.Base.Response;
 using ExpensesControl.Application.UseCases.Revenue.Create.Dto.Request;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +7,10 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ExpensesControl.WebApi.Controllers;
 
+/// <summary>
+/// Controller for revenue management operations.
+/// </summary>
+/// <param name="mediator"></param>
 [ApiController]
 [ApiVersion("1")]
 [Route("api/v{version:apiVersion}/[controller]")]

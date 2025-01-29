@@ -1,4 +1,4 @@
-﻿using CodeFlow.Start.Lib.Context.Base;
+﻿using CodeFlow.Data.Context.Package.Base.Entities;
 using Destructurama.Attributed;
 using ExpensesControl.Domain.Entities.ValueObjects;
 using ExpensesControl.Domain.Enums;
@@ -41,6 +41,11 @@ public class Revenue : BaseEntity<int>
 	/// </summary>
 	public Recurrence Recurrence { get; set; } = new Recurrence();
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Revenue"/> class.
+	/// </summary>
+	/// <param name="errors"></param>
+	/// <returns></returns>
 	public bool Validate(out List<string> errors)
 	{
 		errors = [];

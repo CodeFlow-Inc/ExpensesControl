@@ -1,4 +1,4 @@
-﻿using CodeFlow.Start.Lib.Extensions;
+﻿using CodeFlow.Start.Package.Extensions;
 using ExpensesControl.Application.UseCases.Revenue.Create.Dto.Request;
 using ExpensesControl.Application.UseCases.Revenue.Create.Dto.Response;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;

@@ -8,6 +8,9 @@ namespace ExpensesControl.Domain.Entities.ValueObjects;
 /// </summary>
 public class Payment
 {
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Payment"/> class.
+	/// </summary>
 	public Payment()
 	{
 	}
@@ -20,15 +23,15 @@ public class Payment
 	/// <param name="installmentCount">The number of installments.</param>
 	/// <param name="notes">Additional notes about the payment.</param>
 	public Payment(
+		decimal totalValue,
 		PaymentType type,
 		bool isInstallment = false,
-		int? installmentCount = null,
-		string? notes = null)
+		int? installmentCount = null)
 	{
+		TotalValue = totalValue;
 		Type = type;
 		IsInstallment = isInstallment;
 		InstallmentCount = installmentCount;
-		Notes = notes;
 	}
 
 	/// <summary>

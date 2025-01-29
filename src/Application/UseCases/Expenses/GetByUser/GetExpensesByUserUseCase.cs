@@ -1,6 +1,6 @@
-﻿using CodeFlow.Start.Lib.Extensions;
+﻿using CodeFlow.Start.Package.Extensions;
 using ExpensesControl.Application.Specs;
-using ExpensesControl.Application.UseCases.Base.Expense;
+using ExpensesControl.Application.UseCases.Base.Records.Expense;
 using ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Request;
 using ExpensesControl.Application.UseCases.Expenses.GetByUser.Dto.Response;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
@@ -45,16 +45,16 @@ public class GetExpensesByUserUseCase(
 
 			logger.LogInformation("Expenses retrieved successfully for user {UserCode}.", request.UserCode);
 
-			response.SetResult(result.Select(expense => new ExpenseResponse(
+			response.SetResult(result.Select(expense => new ExpenseRecord(
 				expense.Description,
 				expense.StartDate,
 				expense.EndDate,
 				expense.Category,
-				new RecurrenceResponse(
+				new RecurrenceRecord(
 					expense.Recurrence.IsRecurring,
 					expense.Recurrence.Periodicity,
 					expense.Recurrence.MaxOccurrences),
-				new PaymentResponse(
+				new PaymentRecord(
 					expense.Payment.Type,
 					expense.Payment.IsInstallment,
 					expense.Payment.InstallmentCount,
