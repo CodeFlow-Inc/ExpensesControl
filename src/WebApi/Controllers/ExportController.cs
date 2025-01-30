@@ -21,14 +21,13 @@ public class ExportController(IMediator mediator) : ControllerBase
 	/// <param name="month">Report month (1-12)</param>
 	/// <param name="year">Report year</param>
 	/// <returns>Excel file with monthly financial data</returns>
-	[HttpGet("monthly-report")]
+	[HttpGet("monthly-reports")]
 	[SwaggerOperation(
 		Summary = "Export monthly financial report",
 		Description = "Generates Excel report with expenses and revenues for specified month")]
 	[SwaggerResponse(StatusCodes.Status200OK, "Report generated successfully", typeof(FileResult))]
 	[SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid parameters", typeof(BaseResponse))]
 	[SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal error", typeof(BaseResponse))]
-	[ResponseCache(Duration = 3600)]
 	public async Task<IActionResult> ExportMonthlyReport(
 		[FromHeader, Required] int userCode,
 		[FromQuery, Range(1, 12)] int month,
