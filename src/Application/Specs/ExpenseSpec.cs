@@ -19,6 +19,16 @@ public class ExpenseSpec : Specification<Expense>
 			 .ThenBy(e => e.Payment.TotalValue);
 	}
 
+	public ExpenseSpec(int userCode, int month, int year, bool noTracking = true) : this(noTracking)
+	{
+		IncludePayment();
+		IncludeRecurrence();
+		Query.Where(e => e.UserCode == userCode &&
+						 e.StartDate.Month == month &&
+						 e.StartDate.Year == year)
+			 .OrderBy(e => e.StartDate);
+	}
+
 	public ExpenseSpec IncludePayment()
 	{
 		Query.Include(e => e.Payment);

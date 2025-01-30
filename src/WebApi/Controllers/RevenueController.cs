@@ -1,6 +1,6 @@
 ﻿using CodeFlow.Start.Package.WebTransfer.Base;
 using CodeFlow.Start.Package.WebTransfer.Base.Response;
-using ExpensesControl.Application.UseCases.Revenue.Create.Dto.Request;
+using ExpensesControl.Application.UseCases.Revenues.Create.Dto.Request;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

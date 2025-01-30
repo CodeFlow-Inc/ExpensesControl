@@ -1,8 +1,8 @@
-﻿using ExpensesControl.Application.UseCases.Revenue.Create.Dto.Response;
+﻿using ExpensesControl.Application.UseCases.Revenues.Create.Dto.Response;
 using ExpensesControl.Domain.Enums;
 using MediatR;
 
-namespace ExpensesControl.Application.UseCases.Revenue.Create.Dto.Request;
+namespace ExpensesControl.Application.UseCases.Revenues.Create.Dto.Request;
 
 public record CreateRevenueRequest(int UserCode,
 	string? Description,
