@@ -4,7 +4,6 @@ using ExpensesControl.Application.Specs;
 using ExpensesControl.Application.UseCases.Exports.MonthlyReport.Dto.Request;
 using ExpensesControl.Application.UseCases.Exports.MonthlyReport.Dto.Response;
 using ExpensesControl.Domain.Entities.AggregateRoot;
-using ExpensesControl.Domain.Enums;
 using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using FluentValidation;
 using MediatR;
@@ -75,19 +74,18 @@ public class ExportMonthlyReportUseCase(
 		var row = 2;
 		foreach (var expense in expenses)
 		{
-			var currentRow = worksheet.Row(row);
-
-			// Zebrado apenas na área de dados
-			currentRow.Style.Fill.BackgroundColor = row % 2 == 0
+			// Zebrado apenas nas colunas A-F
+			var dataRowRange = worksheet.Range(row, 1, row, 6);
+			dataRowRange.Style.Fill.BackgroundColor = row % 2 == 0
 				? XLColor.White
 				: XLColor.LightGray;
 
 			worksheet.Cell(row, 1).Value = expense.Description;
 			worksheet.Cell(row, 2).Value = expense.StartDate.ToString("d", CurrentCulture);
-			worksheet.Cell(row, 3).Value = expense.Category.ToString();
+			worksheet.Cell(row, 3).Value = expense.Category.GetDescription();
 			worksheet.Cell(row, 4).Value = expense.Payment.TotalValue;
 			worksheet.Cell(row, 4).Style.NumberFormat.Format = CurrencyFormat;
-			worksheet.Cell(row, 5).Value = expense.Payment.Type.ToString();
+			worksheet.Cell(row, 5).Value = expense.Payment.Type.GetDescription();
 			worksheet.Cell(row, 6).Value = expense.Payment.IsInstallment ? "Sim" : "Não";
 
 			if (expense.Payment.TotalValue > 1000)
@@ -99,7 +97,7 @@ public class ExportMonthlyReportUseCase(
 			row++;
 		}
 
-		// Formatação apenas na área de dados
+		// Formatação
 		if (row > 2)
 		{
 			var dataRange = worksheet.Range(2, 1, row - 1, 6);
@@ -131,16 +129,15 @@ public class ExportMonthlyReportUseCase(
 		var row = 2;
 		foreach (var revenue in revenues)
 		{
-			var currentRow = worksheet.Row(row);
-
-			// Zebrado apenas na área de dados
-			currentRow.Style.Fill.BackgroundColor = row % 2 == 0
+			// Zebrado apenas nas colunas A-E
+			var dataRowRange = worksheet.Range(row, 1, row, 5);
+			dataRowRange.Style.Fill.BackgroundColor = row % 2 == 0
 				? XLColor.White
 				: XLColor.LightGray;
 
 			worksheet.Cell(row, 1).Value = revenue.Description;
 			worksheet.Cell(row, 2).Value = revenue.ReceiptDate.ToString("d", CurrentCulture);
-			worksheet.Cell(row, 3).Value = revenue.Type.ToString();
+			worksheet.Cell(row, 3).Value = revenue.Type.GetDescription();
 			worksheet.Cell(row, 4).Value = revenue.Amount;
 			worksheet.Cell(row, 4).Style.NumberFormat.Format = CurrencyFormat;
 			worksheet.Cell(row, 5).Value = revenue.Recurrence.IsRecurring ? "Sim" : "Não";
@@ -154,7 +151,7 @@ public class ExportMonthlyReportUseCase(
 			row++;
 		}
 
-		// Formatação apenas na área de dados
+		// Formatação
 		if (row > 2)
 		{
 			var dataRange = worksheet.Range(2, 1, row - 1, 5);
@@ -191,19 +188,19 @@ public class ExportMonthlyReportUseCase(
 			("Saldo Final", saldoFinal)
 		};
 
-		var row = 3;
-		foreach (var item in data)
+		var row = 2;
+		foreach (var (Descricao, Valor) in data)
 		{
-			worksheet.Cell(row, 1).Value = item.Descricao;
-			worksheet.Cell(row, 2).Value = item.Valor;
+			worksheet.Cell(row, 1).Value = Descricao;
+			worksheet.Cell(row, 2).Value = Valor;
 			worksheet.Cell(row, 2).Style.NumberFormat.Format = CurrencyFormat;
 
-			if (item.Descricao == "Saldo Final")
+			if (Descricao == "Saldo Final")
 			{
-				var color = item.Valor >= 0 ? XLColor.Green : XLColor.Red;
+				var color = Valor >= 0 ? XLColor.Green : XLColor.Red;
 				worksheet.Cell(row, 2).Style.Font.FontColor = color;
 				worksheet.Cell(row, 2).Style.Font.Bold = true;
-				worksheet.Row(row).Style.Fill.BackgroundColor = XLColor.LightYellow;
+				worksheet.Range(row, 1, row, 2).Style.Fill.BackgroundColor = XLColor.LightYellow;
 			}
 
 			row++;
