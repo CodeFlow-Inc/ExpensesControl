@@ -17,7 +17,7 @@ public class Revenue : BaseEntity<int>
 	public int UserCode { get; set; }
 
 	/// <summary>
-	/// Description of the Revenue3
+	/// Description of the Revenue
 	/// </summary>
 	public string? Description { get; set; }
 
@@ -29,7 +29,12 @@ public class Revenue : BaseEntity<int>
 	/// <summary>
 	/// Date of the Revenue
 	/// </summary>
-	public DateOnly ReceiptDate { get; set; }
+	public DateOnly StartDate { get; set; }
+
+	/// <summary>
+	/// Date of the Revenue	
+	/// </summary>
+	public DateOnly? EndDate { get; set; }
 
 	/// <summary>
 	/// Type of the Revenue

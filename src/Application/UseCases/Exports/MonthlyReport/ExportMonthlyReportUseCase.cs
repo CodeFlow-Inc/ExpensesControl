@@ -1,5 +1,4 @@
-﻿using OfficeOpenXml;
-using OfficeOpenXml.Style;
+﻿using OfficeOpenXml.Style;
 using System.Drawing;
 using CodeFlow.Start.Package.Extensions;
 using ExpensesControl.Application.ExcelReports;
@@ -71,6 +70,21 @@ public class ExportMonthlyReportUseCase(
 			backgroundColor: Color.LightSalmon,
 			bold: true
 		);
+
+		if (expenses.Any())
+		{
+			var chart = worksheet.Drawings.AddChart("DespesasChart", OfficeOpenXml.Drawing.Chart.eChartType.Pie);
+			chart.Title.Text = "Distribuição de Despesas por Categoria";
+
+			var xRange = worksheet.Cells[2, 3, expenses.Count() + 1, 3];
+			var yRange = worksheet.Cells[2, 4, expenses.Count() + 1, 4];
+
+			var series = chart.Series.Add(yRange, xRange);
+			series.Header = "Valores";
+
+			chart.SetPosition(worksheet.Dimension.End.Row + 2, 0, 0, 0);
+			chart.SetSize(600, 400);
+		}
 	}
 
 	private static void AddRevenuesWorksheet(ExcelReportGenerator generator, IEnumerable<Revenue> revenues)
@@ -81,7 +95,7 @@ public class ExportMonthlyReportUseCase(
 		worksheet.AddDataRows(revenues, (row, revenue) =>
 		{
 			worksheet.Cells[row, 1].Value = revenue.Description;
-			worksheet.Cells[row, 2].Value = revenue.ReceiptDate.ToString("d", CultureInfo.CurrentCulture);
+			worksheet.Cells[row, 2].Value = revenue.StartDate.ToString("d", CultureInfo.CurrentCulture);
 			worksheet.Cells[row, 3].Value = revenue.Type.GetDescription();
 			worksheet.Cells[row, 4].Value = revenue.Amount;
 			worksheet.Cells[row, 5].Value = revenue.Recurrence.IsRecurring ? "Sim" : "Não";
@@ -95,6 +109,21 @@ public class ExportMonthlyReportUseCase(
 			backgroundColor: Color.LightGreen,
 			bold: true
 		);
+
+		if (revenues.Any())
+		{
+			var chart = worksheet.Drawings.AddChart("ReceitasChart", OfficeOpenXml.Drawing.Chart.eChartType.BarClustered);
+			chart.Title.Text = "Receitas por Tipo";
+
+			var xRange = worksheet.Cells[2, 3, revenues.Count() + 1, 3];
+			var yRange = worksheet.Cells[2, 4, revenues.Count() + 1, 4];
+
+			var series = chart.Series.Add(yRange, xRange);
+			series.Header = "Valores";
+
+			chart.SetPosition(worksheet.Dimension.End.Row + 2, 0, 0, 0);
+			chart.SetSize(600, 400);
+		}
 	}
 
 	private static void AddBalanceWorksheet(ExcelReportGenerator generator, IEnumerable<Expense> expenses, IEnumerable<Revenue> revenues)
@@ -130,5 +159,17 @@ public class ExportMonthlyReportUseCase(
 				worksheet.Cells[row, 1, row, 2].Style.Fill.BackgroundColor.SetColor(Color.LightYellow);
 			}
 		}, applyZebraStriping: false);
+
+		var chart = worksheet.Drawings.AddChart("SaldoChart", OfficeOpenXml.Drawing.Chart.eChartType.ColumnClustered);
+		chart.Title.Text = "Resumo Financeiro Mensal";
+
+		var xRange = worksheet.Cells[2, 1, 4, 1];
+		var yRange = worksheet.Cells[2, 2, 4, 2];
+
+		var series = chart.Series.Add(yRange, xRange);
+		series.Header = "Valores";
+
+		chart.SetPosition(6, 0, 3, 0);
+		chart.SetSize(600, 400);
 	}
 }

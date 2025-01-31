@@ -23,10 +23,24 @@ public class ExpenseSpec : Specification<Expense>
 	{
 		IncludePayment();
 		IncludeRecurrence();
+
+		var targetDate = new DateOnly(year, month, 1);
+		var firstDayOfMonth = targetDate;
+		var lastDayOfMonth = targetDate.AddMonths(1).AddDays(-1);
+
 		Query.Where(e => e.UserCode == userCode &&
-						 e.StartDate.Month == month &&
-						 e.StartDate.Year == year)
-			 .OrderBy(e => e.StartDate);
+			(
+				// Caso 1: Despesas não recorrentes no mês/ano
+				(!e.Recurrence.IsRecurring &&
+				 e.StartDate.Month == month &&
+				 e.StartDate.Year == year) ||
+
+				// Caso 2: Despesas recorrentes ativas durante o mês/ano
+				(e.Recurrence.IsRecurring &&
+				 e.StartDate <= lastDayOfMonth &&
+				(e.EndDate == null || e.EndDate >= firstDayOfMonth))
+			))
+			.OrderBy(e => e.StartDate);
 	}
 
 	public ExpenseSpec IncludePayment()
