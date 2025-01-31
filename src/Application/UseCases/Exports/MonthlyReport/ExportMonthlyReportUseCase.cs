@@ -1,4 +1,6 @@
-﻿using ClosedXML.Excel;
+﻿using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
 using CodeFlow.Start.Package.Extensions;
 using ExpensesControl.Application.ExcelReports;
 using ExpensesControl.Application.Specs;
@@ -9,6 +11,7 @@ using ExpensesControl.Infrastructure.SqlServer.Repositories.Interface;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 namespace ExpensesControl.Application.UseCases.Exports.MonthlyReport;
 
@@ -48,25 +51,24 @@ public class ExportMonthlyReportUseCase(
 	private static void AddExpensesWorksheet(ExcelReportGenerator generator, IEnumerable<Expense> expenses)
 	{
 		var worksheet = generator.AddWorksheet("Despesas");
-		ExcelReportGenerator.AddHeaders(worksheet, "Descrição", "Data", "Categoria", "Valor Total", "Tipo de Pagamento", "Parcelado");
+		worksheet.AddHeaders("Descrição", "Data", "Categoria", "Valor Total", "Tipo de Pagamento", "Parcelado");
 
-		ExcelReportGenerator.AddDataRows(worksheet, expenses, (row, expense) =>
+		worksheet.AddDataRows(expenses, (row, expense) =>
 		{
-			row.Cell(1).Value = expense.Description;
-			row.Cell(2).Value = expense.StartDate.ToString("d", generator.Culture);
-			row.Cell(3).Value = expense.Category.GetDescription();
-			row.Cell(4).Value = expense.Payment.TotalValue;
-			row.Cell(5).Value = expense.Payment.Type.GetDescription();
-			row.Cell(6).Value = expense.Payment.IsInstallment ? "Sim" : "Não";
+			worksheet.Cells[row, 1].Value = expense.Description;
+			worksheet.Cells[row, 2].Value = expense.StartDate.ToString("d", CultureInfo.CurrentCulture);
+			worksheet.Cells[row, 3].Value = expense.Category.GetDescription();
+			worksheet.Cells[row, 4].Value = expense.Payment.TotalValue;
+			worksheet.Cells[row, 5].Value = expense.Payment.Type.GetDescription();
+			worksheet.Cells[row, 6].Value = expense.Payment.IsInstallment ? "Sim" : "Não";
 
-			ExcelReportGenerator.ApplyCurrencyFormat(row.Cell(4));
+			worksheet.Cells[row, 4].ApplyCurrencyFormat();
 		});
 
-		ExcelReportGenerator.ApplyConditionalFormatting(
-			worksheet,
+		worksheet.ApplyConditionalFormatting(
 			column: 4,
 			condition: cell => cell.GetValue<decimal>() > 1000,
-			backgroundColor: XLColor.LightSalmon,
+			backgroundColor: Color.LightSalmon,
 			bold: true
 		);
 	}
@@ -74,24 +76,23 @@ public class ExportMonthlyReportUseCase(
 	private static void AddRevenuesWorksheet(ExcelReportGenerator generator, IEnumerable<Revenue> revenues)
 	{
 		var worksheet = generator.AddWorksheet("Receitas");
-		ExcelReportGenerator.AddHeaders(worksheet, "Descrição", "Data Recebimento", "Tipo", "Valor", "Recorrente");
+		worksheet.AddHeaders("Descrição", "Data Recebimento", "Tipo", "Valor", "Recorrente");
 
-		ExcelReportGenerator.AddDataRows(worksheet, revenues, (row, revenue) =>
+		worksheet.AddDataRows(revenues, (row, revenue) =>
 		{
-			row.Cell(1).Value = revenue.Description;
-			row.Cell(2).Value = revenue.ReceiptDate.ToString("d", generator.Culture);
-			row.Cell(3).Value = revenue.Type.GetDescription();
-			row.Cell(4).Value = revenue.Amount;
-			row.Cell(5).Value = revenue.Recurrence.IsRecurring ? "Sim" : "Não";
+			worksheet.Cells[row, 1].Value = revenue.Description;
+			worksheet.Cells[row, 2].Value = revenue.ReceiptDate.ToString("d", CultureInfo.CurrentCulture);
+			worksheet.Cells[row, 3].Value = revenue.Type.GetDescription();
+			worksheet.Cells[row, 4].Value = revenue.Amount;
+			worksheet.Cells[row, 5].Value = revenue.Recurrence.IsRecurring ? "Sim" : "Não";
 
-			ExcelReportGenerator.ApplyCurrencyFormat(row.Cell(4));
+			worksheet.Cells[row, 4].ApplyCurrencyFormat();
 		});
 
-		ExcelReportGenerator.ApplyConditionalFormatting(
-			worksheet,
+		worksheet.ApplyConditionalFormatting(
 			column: 4,
 			condition: cell => cell.GetValue<decimal>() > 5000,
-			backgroundColor: XLColor.LightGreen,
+			backgroundColor: Color.LightGreen,
 			bold: true
 		);
 	}
@@ -99,7 +100,7 @@ public class ExportMonthlyReportUseCase(
 	private static void AddBalanceWorksheet(ExcelReportGenerator generator, IEnumerable<Expense> expenses, IEnumerable<Revenue> revenues)
 	{
 		var worksheet = generator.AddWorksheet("Saldo");
-		ExcelReportGenerator.AddHeaders(worksheet, "Resumo Financeiro Mensal", "Valor");
+		worksheet.AddHeaders("Resumo Financeiro Mensal", "Valor");
 		worksheet.Column(1).Width = 30;
 
 		var totalReceitas = revenues.Sum(r => r.Amount);
@@ -113,20 +114,20 @@ public class ExportMonthlyReportUseCase(
 			new { Descricao = "Saldo Final", Valor = saldoFinal }
 		};
 
-		ExcelReportGenerator.AddDataRows(worksheet, data, (row, item) =>
+		worksheet.AddDataRows(data, (row, item) =>
 		{
-			row.Cell(1).Value = item.Descricao;
-			row.Cell(2).Value = item.Valor;
-			ExcelReportGenerator.ApplyCurrencyFormat(row.Cell(2));
+			worksheet.Cells[row, 1].Value = item.Descricao;
+			worksheet.Cells[row, 2].Value = item.Valor;
+			worksheet.Cells[row, 2].ApplyCurrencyFormat();
 
 			if (item.Descricao == "Saldo Final")
 			{
-				var color = item.Valor >= 0 ? XLColor.Green : XLColor.Red;
-				row.Cell(2).Style.Font.FontColor = color;
-				row.Cell(2).Style.Font.Bold = true;
-				ExcelReportGenerator.ApplyZebraStriping(worksheet, row.RowNumber(), headersCount: 2);
-				worksheet.Range(row.RowNumber(), 1, row.RowNumber(), 2).Style
-					.Fill.BackgroundColor = XLColor.LightYellow;
+				var color = item.Valor >= 0 ? Color.Green : Color.Red;
+				worksheet.Cells[row, 2].Style.Font.Color.SetColor(color);
+				worksheet.Cells[row, 2].Style.Font.Bold = true;
+				worksheet.ApplyZebraStriping(row, headersCount: 2);
+				worksheet.Cells[row, 1, row, 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
+				worksheet.Cells[row, 1, row, 2].Style.Fill.BackgroundColor.SetColor(Color.LightYellow);
 			}
 		}, applyZebraStriping: false);
 	}
