@@ -14,11 +14,20 @@ using System.Globalization;
 
 namespace ExpensesControl.Application.UseCases.Exports.MonthlyReport;
 
+/// <summary>
+/// Use case for exporting the monthly financial report as an Excel file.
+/// </summary>
 public class ExportMonthlyReportUseCase(
 	IUnitOfWork unitOfWork,
 	IValidator<ExportMonthlyReportRequest> validator,
 	ILogger<ExportMonthlyReportUseCase> logger) : IRequestHandler<ExportMonthlyReportRequest, ExportMonthlyReportResponse>
 {
+	/// <summary>
+	/// Handles the export request, generating an Excel file with expenses, revenues, and balance information.
+	/// </summary>
+	/// <param name="request">The export request containing user and date filters.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Response containing the generated Excel file.</returns>
 	public async Task<ExportMonthlyReportResponse> Handle(ExportMonthlyReportRequest request, CancellationToken cancellationToken)
 	{
 		var response = new ExportMonthlyReportResponse();
@@ -43,10 +52,15 @@ public class ExportMonthlyReportUseCase(
 			$"relatorio_{request.Month:00}_{request.Year}.xlsx",
 			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
-		logger.LogInformation("Relatório gerado para o usuário {UserCode}", request.UserCode);
+		logger.LogInformation("Report generated for user {UserCode}", request.UserCode);
 		return response;
 	}
 
+	/// <summary>
+	/// Adds a worksheet containing expenses data to the Excel report.
+	/// </summary>
+	/// <param name="generator">The Excel report generator instance.</param>
+	/// <param name="expenses">List of expenses to include in the report.</param>
 	private static void AddExpensesWorksheet(ExcelReportGenerator generator, IEnumerable<Expense> expenses)
 	{
 		var worksheet = generator.AddWorksheet("Despesas");
@@ -87,6 +101,11 @@ public class ExportMonthlyReportUseCase(
 		}
 	}
 
+	/// <summary>
+	/// Adds a worksheet containing revenue data to the Excel report.
+	/// </summary>
+	/// <param name="generator">The Excel report generator instance.</param>
+	/// <param name="revenues">List of revenues to include in the report.</param>
 	private static void AddRevenuesWorksheet(ExcelReportGenerator generator, IEnumerable<Revenue> revenues)
 	{
 		var worksheet = generator.AddWorksheet("Receitas");
@@ -126,6 +145,12 @@ public class ExportMonthlyReportUseCase(
 		}
 	}
 
+	/// <summary>
+	/// Adds a worksheet summarizing the monthly balance to the Excel report.
+	/// </summary>
+	/// <param name="generator">The Excel report generator instance.</param>
+	/// <param name="expenses">List of expenses to calculate balance.</param>
+	/// <param name="revenues">List of revenues to calculate balance.</param>
 	private static void AddBalanceWorksheet(ExcelReportGenerator generator, IEnumerable<Expense> expenses, IEnumerable<Revenue> revenues)
 	{
 		var worksheet = generator.AddWorksheet("Saldo");
