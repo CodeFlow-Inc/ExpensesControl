@@ -11,23 +11,23 @@ public enum RecurrencePeriodicity
 	/// Recurs daily.
 	/// </summary>
 	[Description("Diariamente")]
-	Daily,
+	Daily = 10,
 
 	/// <summary>
 	/// Recurs weekly.
 	/// </summary>
 	[Description("Semanalmente")]
-	Weekly,
+	Weekly = 20,
 
 	/// <summary>
 	/// Recurs monthly.
 	/// </summary>
 	[Description("Mensalmente")]
-	Monthly,
+	Monthly = 30,
 
 	/// <summary>
 	/// Recurs yearly.
 	/// </summary>
 	[Description("Anualmente")]
-	Yearly
+	Yearly = 40
 }

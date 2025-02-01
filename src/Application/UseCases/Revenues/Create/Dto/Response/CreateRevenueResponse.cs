@@ -1,6 +1,6 @@
 ﻿using CodeFlow.Start.Package.WebTransfer.Base.Response;
 
-namespace ExpensesControl.Application.UseCases.Revenue.Create.Dto.Response;
+namespace ExpensesControl.Application.UseCases.Revenues.Create.Dto.Response;
 
 /// <summary>
 /// Response after creating an revenue.

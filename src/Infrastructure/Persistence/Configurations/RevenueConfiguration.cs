@@ -39,11 +39,16 @@ public class RevenueConfiguration : BaseEntityConfiguration<Revenue, int>
 			.HasPrecision(18, 2) // Defines precision for monetary values
 			.HasColumnName("amount");
 
-		// ReceiptDate (required)
-		builder.Property(r => r.ReceiptDate)
+		// StartDate (required)
+		builder.Property(e => e.StartDate)
 			.IsRequired()
 			.HasColumnType("date") // Maps to SQL "date" type
-			.HasColumnName("receipt_date");
+			.HasColumnName("start_date");
+
+		// EndDate (optional)
+		builder.Property(e => e.EndDate)
+			.HasColumnType("date") // Maps to SQL "date" type
+			.HasColumnName("end_date");
 
 		// Type (required enum)
 		builder.Property(r => r.Type)
